@@ -3,13 +3,25 @@
 #include <getopt.h>
 
 static const char *usage =
-    "Usage:\n"
-    "    %1$s [LIST...]\n"
-    "    %1$s -a [-n list] [-s directory] TASK...\n"
-    "    %1$s -i [-n list] [-s directory] TASK POSITION\n"
-    "    %1$s -d [-n list] [-s directory] POSITION...\n"
-    "    %1$s -m [-n list] [-s directory] PREV_POS NEW_POS\n"
-    "    %1$s -r [-s directory] LIST...\n";
+    "Usage: %1$s [LIST]...\n"
+    "  or   %1$s -a [-n list] [-s directory] TASK...\n"
+    "  or   %1$s -i [-n list] [-s directory] TASK POSITION\n"
+    "  or   %1$s -d [-n list] [-s directory] POSITION...\n"
+    "  or   %1$s -m [-n list] [-s directory] PREV_POS NEW_POS\n"
+    "  or   %1$s -r [-s directory] LIST...\n"
+    "Manage your todo/task lists with this small utility.\n"
+    "\n"
+    "Options:\n"
+    "  -a            Add tasks by appending them to a list\n"
+    "  -d            Delete tasks\n"
+    "  -i            Insert a task into a list at a specific position\n"
+    "  -m            Move a task inside a list from one position to another\n"
+    "  -n list       Select a specific list for your current operation\n"
+    "  -r            Remove task lists\n"
+    "  -s directory  Select a specific directory to store task lists\n"
+    "\n"
+    "Copyright (c) 2018 Martin Disch <martindisch@gmail.com>\n"
+    "Project website <https://github.com/martindisch/tasuke>\n";
 
 int main(int argc, char **argv) {
     // Flags without option argument
