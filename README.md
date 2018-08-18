@@ -24,11 +24,8 @@ For example, to add two new tasks to a list called *school*, you would do
 ```
 t -a -n school "Study for exam" "Prepare presentation"
 ```
-Since tasuke uses GNU options, you can of course mix this up however you want.
-```
-t -a "Study for exam" -n school "Prepare presentation"
-```
-And you can even combine short options.
+To be as portable as possible, tasuke uses the POSIX utility argument syntax.
+This lets you combine options, subject to certain limitations of course.
 ```
 t -an school "Study for exam" "Prepare presentation"
 ```
@@ -46,8 +43,7 @@ you can make the alias use this argument by default.
 **List tasks**
 ```
 t                                           # List default list
-t -l                                        # List all lists
-t -l mylist                                 # List specific list
+t mylist school                             # List specific lists
 ```
 
 **Add task(s)** by appending to list
@@ -79,10 +75,9 @@ t -m -n mylist 3 5                          # Move inside specific list
 t -a "New task" -s /path/to/dir             # Add to default list in directory
 ```
 
-**Delete list**
+**Delete list(s)**
 ```
-t -r                                        # Delete default list
-t -r mylist                                 # Delete specific list
+t -r mylist school                          # Delete specific lists
 ```
 
 ## License
