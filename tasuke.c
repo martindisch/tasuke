@@ -74,10 +74,17 @@ int main(int argc, char **argv) {
         }
     }
 
-    // Check if there was a problem and usage should be shown
-    if (errflg ||                               // Problem parsing
-        aflg + iflg + dflg + mflg + rflg > 1 || // Exclusive flags
-        nflg + rflg > 1) {                      // -r doesn't have -n option
+    // Checks for parsing problems and bad usage of flags
+    if (
+        // Problem noticed by getop
+        errflg ||
+        // Mutually exclusive flags
+        aflg + iflg + dflg + mflg + rflg > 1 ||
+        // -r doesn't have -n option
+        nflg + rflg > 1 ||
+        // -n can't occur on its own
+        nflg > aflg + iflg + dflg + mflg
+    ) {
         fprintf(stderr, usage, argv[0]);
         exit(EXIT_FAILURE);
     }
