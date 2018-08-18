@@ -4,12 +4,12 @@
 
 static const char *usage =
     "Usage:\n"
-    "   tasuke [LIST...]\n"
-    "   tasuke -a [-n list] [-s directory] TASK...\n"
-    "   tasuke -i [-n list] [-s directory] TASK POSITION\n"
-    "   tasuke -d [-n list] [-s directory] POSITION...\n"
-    "   tasuke -m [-n list] [-s directory] PREV_POS NEW_POS\n"
-    "   tasuke -r [-s directory] LIST...\n";
+    "    %1$s [LIST...]\n"
+    "    %1$s -a [-n list] [-s directory] TASK...\n"
+    "    %1$s -i [-n list] [-s directory] TASK POSITION\n"
+    "    %1$s -d [-n list] [-s directory] POSITION...\n"
+    "    %1$s -m [-n list] [-s directory] PREV_POS NEW_POS\n"
+    "    %1$s -r [-s directory] LIST...\n";
 
 int main(int argc, char **argv) {
     // Flags without option argument
@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
     if (errflg ||                               // Problem parsing
         aflg + iflg + dflg + mflg + rflg > 1 || // Exclusive flags
         nflg + rflg > 1) {                      // -r doesn't have -n option
-        fprintf(stderr, usage);
+        fprintf(stderr, usage, argv[0]);
         exit(EXIT_FAILURE);
     }
 
