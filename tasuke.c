@@ -14,6 +14,7 @@ static const char *usage =
     "Options:\n"
     "  -a            Add tasks by appending them to a list\n"
     "  -d            Delete tasks\n"
+    "  -h            Print usage information\n"
     "  -i            Insert a task into a list at a specific position\n"
     "  -m            Move a task inside a list from one position to another\n"
     "  -n list       Select a specific list for your current operation\n"
@@ -34,7 +35,7 @@ int main(int argc, char **argv) {
     char *nvalue = NULL, *svalue = NULL;
 
     int c;
-    while ((c = getopt(argc, argv, "aidmrn:s:")) != -1) {
+    while ((c = getopt(argc, argv, "aidmrhn:s:")) != -1) {
         switch (c) {
             case 'a':
                 aflg = 1;
@@ -51,6 +52,9 @@ int main(int argc, char **argv) {
             case 'r':
                 rflg = 1;
                 break;
+            case 'h':
+                printf(usage, argv[0]);
+                exit(EXIT_SUCCESS);
             case 'n':
                 nflg = 1;
                 nvalue = optarg;
