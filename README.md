@@ -1,4 +1,10 @@
 # tasuke [WIP]
+
+<p align="center">
+    <img alt="tasuke kanji" width="50%" src="media/kanji_regular.svg"/>
+</p>
+
+## Description
 A simple task/todo application for the terminal.
 A *no fuss, no muss* replacement for your trusty todo.txt, giving you a more
 convenient way to access your tasks without all the cruft of more complex
