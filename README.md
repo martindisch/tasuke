@@ -12,7 +12,7 @@ todo applications that make you spend time overmanaging your todo list.
 It supports multiple task lists and lets you manually order tasks, but
 that's about it.
 No history, no priorities, no dates and no reminders.
-Your task lists are stored in plain text files in a location of your choice.
+Your task lists are stored as plain text in a location of your choice.
 
 ## Usage
 
