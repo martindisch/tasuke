@@ -105,6 +105,12 @@ int main(int argc, char **argv) {
     const char *error;
     if (aflg) {
         char *file = get_file(svalue, nvalue);
+        // Handle error
+        if (!file) {
+            fprintf(stderr, "Unable to access directory\n");
+            free(file);
+            exit(EXIT_FAILURE);
+        }
         error = add(file, &argv[optind]);
         free(file);
     }

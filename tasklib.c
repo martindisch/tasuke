@@ -3,6 +3,7 @@
 #include <pwd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include "tasklib.h"
 
 static int has_trailing_slash(const char *);
@@ -43,6 +44,20 @@ char *get_file(const char *dir, const char *list) {
     // If no list name was set, use the default
     if (!list) {
         list = "todo";
+    }
+
+    /*
+     * Check if the directory still exists and try to create it if not
+     */
+    struct stat buffer;
+    // Does directory exist?
+    if (!(stat(dir_cpy, &buffer) == 0 && S_ISDIR(buffer.st_mode))) {
+        // If not, create it
+        if (mkdir(dir_cpy, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0) {
+            // There was an error, free memory and return
+            free(dir_cpy);
+            return NULL;
+        }
     }
 
     /*
