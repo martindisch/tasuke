@@ -88,7 +88,7 @@ int main(int argc, char **argv) {
      * Several checks for parsing problems and bad usage of flags
      */
     if (
-        // Problem noticed by getop
+        // Problem noticed by getopt
         errflg ||
         // Mutually exclusive flags
         aflg + iflg + dflg + mflg + rflg > 1 ||
