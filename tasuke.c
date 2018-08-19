@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <unistd.h>
+#include <pwd.h>
+#include "tasklib.h"
 
 static const char *usage =
     "Usage: %1$s [-s directory] [LIST]...\n"
@@ -25,6 +28,9 @@ static const char *usage =
     "Project website <https://github.com/martindisch/tasuke>\n";
 
 int main(int argc, char **argv) {
+    /*
+     * Flags & option argument variables for user input
+     */
     // Flags without option argument
     int aflg = 0, iflg = 0, dflg = 0, mflg = 0, rflg = 0;
     // Flags with option argument
@@ -34,6 +40,10 @@ int main(int argc, char **argv) {
     // Pointers to option arguments
     char *nvalue = NULL, *svalue = NULL;
 
+    /*
+     * Simple argument parsing, mostly just setting flags.
+     * Would be simpler with argp, but we need to use getopt for portability.
+     */
     int c;
     while ((c = getopt(argc, argv, "aidmrhn:s:")) != -1) {
         switch (c) {
@@ -74,7 +84,9 @@ int main(int argc, char **argv) {
         }
     }
 
-    // Checks for parsing problems and bad usage of flags
+    /*
+     * Several checks for parsing problems and bad usage of flags
+     */
     if (
         // Problem noticed by getop
         errflg ||
@@ -89,9 +101,33 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
 
-    // Otherwise print out the positional arguments
-    for ( ; optind < argc; optind++) {
-        printf("Found argument: %s\n", argv[optind]);
+    /*
+     * Prepare default values for unset flags
+     */
+    // If no directory was set, find the user home by checking $HOME and
+    // falling back to getpwuid if necessary
+    if (!svalue) {
+        if ((svalue = getenv("HOME")) == NULL) {
+            svalue = getpwuid(getuid())->pw_dir;
+        }
+    }
+    // If no list name was set, use the default
+    if (!nvalue) {
+        nvalue = "todo";
+    }
+
+    /*
+     * Handle command
+     */
+    const char *error;
+    if (aflg) {
+        error = add(svalue, nvalue, &argv[optind]);
+    }
+    // TODO: implement more functions here
+    // If there was a problem, show the error message
+    if (error) {
+        fprintf(stderr, error);
+        exit(EXIT_FAILURE);
     }
 
     exit(EXIT_SUCCESS);
