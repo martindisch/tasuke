@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     // Set to 1 if there is a problem parsing options
     int errflg = 0;
     // Pointers to option arguments
-    char *nvalue = NULL, *svalue = NULL;
+    const char *nvalue = NULL, *svalue = NULL;
 
     /*
      * Simple argument parsing, mostly just setting flags.

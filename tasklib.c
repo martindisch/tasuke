@@ -31,7 +31,7 @@ char *get_file(const char *dir, const char *list) {
         const char *dir_format =
             has_trailing_slash(dir) ? "%s.tasuke" : "%s/.tasuke";
         // Allocate memory to copy in dir & the default .tasuke
-        dir_cpy = calloc(strlen(dir) + 10, sizeof(char));
+        dir_cpy = calloc(strlen(dir) + 9, sizeof(char));
         // Build the new directory path
         sprintf(dir_cpy, dir_format, dir);
     } else {
@@ -49,7 +49,7 @@ char *get_file(const char *dir, const char *list) {
      * Build full path to file
      */
     // Allocate memory for full path (freed by user)
-    char *file = calloc(strlen(dir_cpy) + strlen(list) + 10, sizeof(char));
+    char *file = calloc(strlen(dir_cpy) + strlen(list) + 6, sizeof(char));
     // Choose format based on whether there is a trailing slash already
     const char *path_format =
         has_trailing_slash(dir_cpy) ? "%s%s.txt" : "%s/%s.txt";
