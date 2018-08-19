@@ -5,7 +5,7 @@
 #include <string.h>
 #include "tasklib.h"
 
-static const int has_trailing_slash(const char *);
+static int has_trailing_slash(const char *);
 
 const char *add(const char *file, char **tasks) {
     printf("Adding tasks to file %s\n", file);
