@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
-#include <unistd.h>
-#include <pwd.h>
 #include "tasklib.h"
 
 static const char *usage =
@@ -102,26 +100,13 @@ int main(int argc, char **argv) {
     }
 
     /*
-     * Prepare default values for unset flags
-     */
-    // If no directory was set, find the user home by checking $HOME and
-    // falling back to getpwuid if necessary
-    if (!svalue) {
-        if ((svalue = getenv("HOME")) == NULL) {
-            svalue = getpwuid(getuid())->pw_dir;
-        }
-    }
-    // If no list name was set, use the default
-    if (!nvalue) {
-        nvalue = "todo";
-    }
-
-    /*
      * Handle command
      */
     const char *error;
     if (aflg) {
-        error = add(svalue, nvalue, &argv[optind]);
+        char *file = get_file(svalue, nvalue);
+        error = add(file, &argv[optind]);
+        free(file);
     }
     // TODO: implement more functions here
     // If there was a problem, show the error message
