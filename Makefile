@@ -1,18 +1,21 @@
+CFLAGS = -Wall
+DEBUG = -g -O0
+
 .PHONY: all clean debug
 
 all: tasuke
 
-tasuke: tasuke.o tasklib.o
-	gcc -Wall tasuke.o tasklib.o -o tasuke
+debug: CFLAGS += $(DEBUG)
+debug: tasuke
 
-debug: tasuke.o tasklib.o
-	gcc -Wall -g -O0 tasuke.o tasklib.o -o tasuke
+tasuke: tasuke.o tasklib.o
+	gcc $(CFLAGS) tasuke.o tasklib.o -o tasuke
 
 tasuke.o: tasuke.c
-	gcc -Wall -c tasuke.c -o tasuke.o
+	gcc -c $(CFLAGS) tasuke.c -o tasuke.o
 
 tasklib.o: tasklib.c tasklib.h
-	gcc -Wall -c tasklib.c -o tasklib.o
+	gcc -c $(CFLAGS) tasklib.c -o tasklib.o
 
 clean:
 	rm -f tasuke *.o
