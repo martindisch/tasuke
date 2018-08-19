@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
                 break;
             case 's':
                 sflg = 1;
-                nvalue = optarg;
+                svalue = optarg;
                 break;
             case ':':
                 // Option flag without required option argument
