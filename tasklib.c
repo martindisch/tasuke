@@ -9,10 +9,24 @@
 static int has_trailing_slash(const char *);
 
 const char *add(const char *file, char **tasks) {
-    printf("Adding tasks to file %s\n", file);
-    while (*tasks != NULL) {
-        printf("Element %s\n", *tasks);
+    // Open file in append mode
+    FILE *fp;
+    if ((fp = fopen(file, "a")) == NULL) {
+        return "Unable to open task list\n";
+    }
+
+    // Write all tasks to file
+    while (*tasks) {
+        if (fprintf(fp, "%s\n", *tasks) < 0) {
+            fclose(fp);
+            return "Unable to write to file\n";
+        }
         tasks++;
+    }
+
+    // Close file
+    if (fclose(fp) == EOF) {
+        return "Unable to close file\n";
     }
     return NULL;
 }
