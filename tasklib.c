@@ -91,6 +91,45 @@ char *get_file(const char *dir, const char *list) {
     return file;
 }
 
+char **get_files(const char *dir, char **lists) {
+    // Get number of lists by iterating over array until NULL terminator found
+    int i;
+    for (i = 0; lists[i]; i++);
+
+    // Build path array
+    char **files;
+    if (i == 0) {
+        // No lists given, allocate memory for default list + terminator
+        files = calloc(2, sizeof(char *));
+        // Build path to default list
+        if ((files[0] = get_file(dir, NULL)) == NULL) {
+            // Free the empty array
+            free(files);
+            return NULL;
+        }
+    } else {
+        // Some lists were given, allocate memory for them + terminator
+        files = calloc(i + 1, sizeof(char *));
+        // Iterate over lists, building paths
+        int y;
+        for (y = 0; y < i; y++) {
+            if ((files[y] = get_file(dir, lists[y])) == NULL) {
+                // Free paths we've already acquired at this point
+                for (y--; y >= 0; y--) {
+                    free(files[y]);
+                }
+                // Free the empty array
+                free(files);
+                return NULL;
+            }
+        }
+    }
+    // Since we calloc'ed our array, the final extra element is already NULL,
+    // so we don't need to explicitly assign that to have it act as terminator
+
+    return files;
+}
+
 static int has_trailing_slash(const char *path) {
     // Iterate over string until we find the end
     while (*path != '\0') path++;

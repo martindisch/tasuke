@@ -28,4 +28,26 @@ const char *add(const char *file, char **tasks);
  */
 char *get_file(const char *dir, const char *list);
 
+/**
+ * Builds an array of full paths to the task list files based on dir and names.
+ *
+ * If the directory is NULL, the default will be used, which is .tasuke
+ * inside the user home.
+ * The same goes for the task lists. If the array is empty (containing only
+ * a NULL element), an array containing only the path to the default list
+ * (and of course the NULL terminator) is returned.
+ * If the directory does not yet exist, it will be created. This works only for
+ * one directory, it won't recreate a full path that doesn't exist.
+ * Because this returns an array of previously unknown size, it needs to
+ * dynamically allocate memory for it. The user is responsible for freeing.
+ * If there is an error accessing or creating the directory, NULL is returned.
+ *
+ * @param dir Path to directory where task lists are stored (NULL for default)
+ * @param lists Array of list names, terminated by a NULL element (containing
+ *              only a NULL element for default list)
+ * @return Array of full paths to task list files (freed by user, terminated
+ *         by a NULL element) or NULL on error
+ */
+char **get_files(const char *dir, char **lists);
+
 #endif // TASKLIB_H

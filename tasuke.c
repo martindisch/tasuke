@@ -111,7 +111,10 @@ int main(int argc, char **argv) {
         }
     } else {
         // The other commands (list list(s), remove list(s)) may need several
-        // TODO: Build array of filenames
+        if ((files = get_files(svalue, &argv[optind])) == NULL) {
+            fprintf(stderr, "Unable to access directory\n");
+            exit(EXIT_FAILURE);
+        }
     }
 
     /*
@@ -130,7 +133,10 @@ int main(int argc, char **argv) {
         error = "Not yet implemented\n";
     } else {
         // No command flag (= list command)
-        error = "Not yet implemented\n";
+        int i;
+        for (i = 0; files[i]; i++) {
+            printf("%s\n", files[i]);
+        }
     }
 
     /*
@@ -140,7 +146,12 @@ int main(int argc, char **argv) {
         free(file);
     }
     if (files) {
-        // TODO: iterate through array, freeing all file names
+        // Free all paths in files array
+        int i;
+        for (i = 0; files[i]; i++) {
+            free(files[i]);
+        }
+        // Free the array itself
         free(files);
     }
 
