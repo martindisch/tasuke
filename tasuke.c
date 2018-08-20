@@ -107,7 +107,6 @@ int main(int argc, char **argv) {
         // These commands use only a single task list
         if ((file = get_file(svalue, nvalue)) == NULL) {
             fprintf(stderr, "Unable to access directory\n");
-            free(file);
             exit(EXIT_FAILURE);
         }
     } else {
