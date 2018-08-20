@@ -28,6 +28,7 @@ const char *add(const char *file, char **tasks) {
     if (fclose(fp) == EOF) {
         return "Unable to close file\n";
     }
+
     return NULL;
 }
 
