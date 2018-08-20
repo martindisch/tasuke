@@ -11,6 +11,14 @@
 const char *add(const char *file, char **tasks);
 
 /**
+ * Prints task lists to stdout.
+ *
+ * @param files Array of file paths, terminated by a NULL element
+ * @return Error message or NULL on success
+ */
+const char *list(char **files);
+
+/**
  * Builds a full path to the task list file based on directory and list name.
  *
  * If the directory is NULL, the default will be used, which is .tasuke

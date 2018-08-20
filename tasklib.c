@@ -3,6 +3,7 @@
 #include <pwd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 #include <sys/stat.h>
 #include "tasklib.h"
 
@@ -27,6 +28,36 @@ const char *add(const char *file, char **tasks) {
     // Close file
     if (fclose(fp) == EOF) {
         return "Unable to close file\n";
+    }
+
+    return NULL;
+}
+
+const char *list(char **files) {
+    FILE *fp;
+    char line[LINE_MAX];
+
+    // Iterate over path array until terminator is encountered
+    while (*files) {
+        // Open file in read mode
+        if ((fp = fopen(*files, "r")) == NULL) {
+            return "Unable to open task list\n";
+        }
+
+        // Print list name
+        printf("%s:\n", *files);
+        // Print tasks
+        while (fgets(line, LINE_MAX, fp) != NULL) {
+            printf("    %s", line);
+        }
+        // Print empty line for visual separation between lists
+        printf("\n");
+
+        // Close file
+        if (fclose(fp) == EOF) {
+            return "Unable to close file\n";
+        }
+        files++;
     }
 
     return NULL;

@@ -133,10 +133,7 @@ int main(int argc, char **argv) {
         error = "Not yet implemented\n";
     } else {
         // No command flag (= list command)
-        int i;
-        for (i = 0; files[i]; i++) {
-            printf("%s\n", files[i]);
-        }
+        error = list(files);
     }
 
     /*
