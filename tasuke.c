@@ -100,22 +100,44 @@ int main(int argc, char **argv) {
     }
 
     /*
-     * Handle command
+     * Get the filename(s) the commands will need
      */
-    const char *error;
-    if (aflg) {
-        char *file = get_file(svalue, nvalue);
-        // Handle error
-        if (!file) {
+    char *file = NULL, **files = NULL;
+    if (aflg + iflg + dflg + mflg) {
+        // These commands use only a single task list
+        if ((file = get_file(svalue, nvalue)) == NULL) {
             fprintf(stderr, "Unable to access directory\n");
             free(file);
             exit(EXIT_FAILURE);
         }
+    } else {
+        // The other commands (list list(s), remove list(s)) may need several
+        // TODO: Build array of filenames
+    }
+
+    /*
+     * Handle command
+     */
+    const char *error;
+    if (aflg) {
         error = add(file, &argv[optind]);
-        free(file);
     }
     // TODO: implement more functions here
-    // If there was a problem, show the error message
+
+    /*
+     * Free file name(s)
+     */
+    if (file) {
+        free(file);
+    }
+    if (files) {
+        // TODO: iterate through array, freeing all file names
+        free(files);
+    }
+
+    /*
+     * If there was a problem executing the command, exit with error
+     */
     if (error) {
         fprintf(stderr, error);
         exit(EXIT_FAILURE);
