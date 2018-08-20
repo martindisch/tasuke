@@ -65,9 +65,9 @@ char *get_file(const char *dir, const char *list) {
      */
     struct stat buffer;
     // Does directory exist?
-    if (!(stat(dir_cpy, &buffer) == 0 && S_ISDIR(buffer.st_mode))) {
+    if (stat(dir_cpy, &buffer) == -1 || S_ISDIR(buffer.st_mode) == 0) {
         // If not, create it
-        if (mkdir(dir_cpy, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) != 0) {
+        if (mkdir(dir_cpy, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1) {
             // There was an error, free memory and return
             free(dir_cpy);
             return NULL;
