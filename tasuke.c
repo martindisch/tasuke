@@ -121,8 +121,18 @@ int main(int argc, char **argv) {
     const char *error;
     if (aflg) {
         error = add(file, &argv[optind]);
+    } else if (iflg) {
+        error = "Not yet implemented\n";
+    } else if (dflg) {
+        error = "Not yet implemented\n";
+    } else if (mflg) {
+        error = "Not yet implemented\n";
+    } else if (rflg) {
+        error = "Not yet implemented\n";
+    } else {
+        // No command flag (= list command)
+        error = "Not yet implemented\n";
     }
-    // TODO: implement more functions here
 
     /*
      * Free file name(s)
