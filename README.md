@@ -77,6 +77,7 @@ t -a "New task" -s /path/to/dir             # Add to default list in directory
 
 **Delete list(s)**
 ```
+t -r                                        # Delete default task list
 t -r mylist school                          # Delete specific lists
 ```
 

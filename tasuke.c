@@ -9,7 +9,7 @@ static const char *usage =
     "  or   %1$s -i [-n list] [-s directory] TASK POSITION\n"
     "  or   %1$s -d [-n list] [-s directory] POSITION...\n"
     "  or   %1$s -m [-n list] [-s directory] PREV_POS NEW_POS\n"
-    "  or   %1$s -r [-s directory] LIST...\n"
+    "  or   %1$s -r [-s directory] [LIST]...\n"
     "Manage your todo/task lists with this small utility.\n"
     "\n"
     "Options:\n"
