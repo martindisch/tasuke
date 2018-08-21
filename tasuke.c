@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
     /*
      * Handle command
      */
-    const char *error;
+    const char *error = NULL;
     if (aflg) {
         error = add(file, &argv[optind]);
     } else if (iflg) {
