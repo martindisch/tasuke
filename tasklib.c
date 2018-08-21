@@ -47,8 +47,9 @@ const char *list(char **files) {
         // Print list name
         printf("%s:\n", *files);
         // Print tasks
+        int i = 1;
         while (fgets(line, LINE_MAX, fp) != NULL) {
-            printf("    %s", line);
+            printf("[%d] %s", i++, line);
         }
         // Print empty line for visual separation between lists
         printf("\n");
