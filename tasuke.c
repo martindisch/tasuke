@@ -126,7 +126,7 @@ int main(int argc, char **argv) {
     } else if (iflg) {
         error = "Not yet implemented\n";
     } else if (dflg) {
-        error = "Not yet implemented\n";
+        error = done(file, &argv[optind]);
     } else if (mflg) {
         error = "Not yet implemented\n";
     } else if (rflg) {

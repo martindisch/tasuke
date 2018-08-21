@@ -33,6 +33,23 @@ const char *add(const char *file, char **tasks) {
     return NULL;
 }
 
+const char *done(const char *file, char **positions) {
+    // Open file in read & write mode
+    FILE *fp;
+    if ((fp = fopen(file, "r+")) == NULL) {
+        return "Unable to open task list\n";
+    }
+
+    // TODO
+
+    // Close file
+    if (fclose(fp) == EOF) {
+        return "Unable to close file\n";
+    }
+
+    return NULL;
+}
+
 const char *list(char **files) {
     FILE *fp;
     char line[LINE_MAX];

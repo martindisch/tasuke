@@ -11,6 +11,16 @@
 const char *add(const char *file, char **tasks);
 
 /**
+ * Deletes tasks from a list.
+ *
+ * @param file Full path to file
+ * @param positions Array of task indices (1-based, type string), terminated
+ *                  by a NULL element
+ * @return Error message or NULL on success
+ */
+const char *done(const char *file, char **positions);
+
+/**
  * Prints task lists to stdout.
  *
  * @param files Array of file paths, terminated by a NULL element
