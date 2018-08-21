@@ -7,79 +7,20 @@
 #include <sys/stat.h>
 #include "tasklib.h"
 
-static int has_trailing_slash(const char *);
+/*
+ * Private helper functions
+ */
 
-const char *add(const char *file, char **tasks) {
-    // Open file in append mode
-    FILE *fp;
-    if ((fp = fopen(file, "a")) == NULL) {
-        return "Unable to open task list\n";
-    }
-
-    // Write all tasks to file
-    while (*tasks) {
-        if (fprintf(fp, "%s\n", *tasks) < 0) {
-            fclose(fp);
-            return "Unable to write to file\n";
-        }
-        tasks++;
-    }
-
-    // Close file
-    if (fclose(fp) == EOF) {
-        return "Unable to close file\n";
-    }
-
-    return NULL;
+static int has_trailing_slash(const char *path) {
+    // Iterate over string until we find the end
+    while (*path != '\0') path++;
+    // Compare last character (before terminator) with slash
+    return *(path - 1) == '/';
 }
 
-const char *done(const char *file, char **positions) {
-    // Open file in read & write mode
-    FILE *fp;
-    if ((fp = fopen(file, "r+")) == NULL) {
-        return "Unable to open task list\n";
-    }
-
-    // TODO
-
-    // Close file
-    if (fclose(fp) == EOF) {
-        return "Unable to close file\n";
-    }
-
-    return NULL;
-}
-
-const char *list(char **files) {
-    FILE *fp;
-    char line[LINE_MAX];
-
-    // Iterate over path array until terminator is encountered
-    while (*files) {
-        // Open file in read mode
-        if ((fp = fopen(*files, "r")) == NULL) {
-            return "Unable to open task list\n";
-        }
-
-        // Print list name
-        printf("%s:\n", *files);
-        // Print tasks
-        int i = 1;
-        while (fgets(line, LINE_MAX, fp) != NULL) {
-            printf("[%d] %s", i++, line);
-        }
-        // Print empty line for visual separation between lists
-        printf("\n");
-
-        // Close file
-        if (fclose(fp) == EOF) {
-            return "Unable to close file\n";
-        }
-        files++;
-    }
-
-    return NULL;
-}
+/*
+ * Public helper functions
+ */
 
 char *get_file(const char *dir, const char *list) {
     /*
@@ -180,9 +121,78 @@ char **get_files(const char *dir, char **lists) {
     return files;
 }
 
-static int has_trailing_slash(const char *path) {
-    // Iterate over string until we find the end
-    while (*path != '\0') path++;
-    // Compare last character (before terminator) with slash
-    return *(path - 1) == '/';
+/*
+ * Commands
+ */
+
+const char *add(const char *file, char **tasks) {
+    // Open file in append mode
+    FILE *fp;
+    if ((fp = fopen(file, "a")) == NULL) {
+        return "Unable to open task list\n";
+    }
+
+    // Write all tasks to file
+    while (*tasks) {
+        if (fprintf(fp, "%s\n", *tasks) < 0) {
+            fclose(fp);
+            return "Unable to write to file\n";
+        }
+        tasks++;
+    }
+
+    // Close file
+    if (fclose(fp) == EOF) {
+        return "Unable to close file\n";
+    }
+
+    return NULL;
+}
+
+const char *done(const char *file, char **positions) {
+    // Open file in read & write mode
+    FILE *fp;
+    if ((fp = fopen(file, "r+")) == NULL) {
+        return "Unable to open task list\n";
+    }
+
+    // TODO
+
+    // Close file
+    if (fclose(fp) == EOF) {
+        return "Unable to close file\n";
+    }
+
+    return NULL;
+}
+
+const char *list(char **files) {
+    FILE *fp;
+    char line[LINE_MAX];
+
+    // Iterate over path array until terminator is encountered
+    while (*files) {
+        // Open file in read mode
+        if ((fp = fopen(*files, "r")) == NULL) {
+            return "Unable to open task list\n";
+        }
+
+        // Print list name
+        printf("%s:\n", *files);
+        // Print tasks
+        int i = 1;
+        while (fgets(line, LINE_MAX, fp) != NULL) {
+            printf("[%d] %s", i++, line);
+        }
+        // Print empty line for visual separation between lists
+        printf("\n");
+
+        // Close file
+        if (fclose(fp) == EOF) {
+            return "Unable to close file\n";
+        }
+        files++;
+    }
+
+    return NULL;
 }
