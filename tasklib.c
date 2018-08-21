@@ -6,6 +6,7 @@
 #include <limits.h>
 #include <sys/stat.h>
 #include "tasklib.h"
+#include "tasklist.h"
 
 /*
  * Private helper functions
@@ -167,30 +168,20 @@ const char *done(const char *file, char **positions) {
 }
 
 const char *list(char **files) {
-    FILE *fp;
-    char line[LINE_MAX];
-
     // Iterate over path array until terminator is encountered
     while (*files) {
-        // Open file in read mode
-        if ((fp = fopen(*files, "r")) == NULL) {
-            return "Unable to open task list\n";
+        // Initialize TaskList ADT
+        TaskList list = tasklist_init(*files);
+        // Attempt reading current list
+        char *error = tasklist_read(list, *files);
+        if (error) {
+            tasklist_destroy(list);
+            return error;
         }
-
-        // Print list name
-        printf("%s:\n", *files);
-        // Print tasks
-        int i = 1;
-        while (fgets(line, LINE_MAX, fp) != NULL) {
-            printf("[%d] %s", i++, line);
-        }
-        // Print empty line for visual separation between lists
-        printf("\n");
-
-        // Close file
-        if (fclose(fp) == EOF) {
-            return "Unable to close file\n";
-        }
+        // If there was no problem, print it
+        tasklist_print(list);
+        // Cleanup
+        tasklist_destroy(list);
         files++;
     }
 
