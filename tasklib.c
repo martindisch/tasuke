@@ -38,12 +38,12 @@ char *get_file(const char *dir, const char *list) {
         const char *dir_format =
             has_trailing_slash(dir) ? "%s.tasuke" : "%s/.tasuke";
         // Allocate memory to copy in dir & the default .tasuke
-        dir_cpy = calloc(strlen(dir) + 9, sizeof(char));
+        dir_cpy = malloc((strlen(dir) + 9) * sizeof(char));
         // Build the new directory path
         sprintf(dir_cpy, dir_format, dir);
     } else {
         // Allocate memory for simple copy of dir
-        dir_cpy = calloc(strlen(dir) + 1, sizeof(char));
+        dir_cpy = malloc((strlen(dir) + 1) * sizeof(char));
         // Since the user supplied a custom directory, just use this one
         strcpy(dir_cpy, dir);
     }
@@ -70,7 +70,7 @@ char *get_file(const char *dir, const char *list) {
      * Build full path to file
      */
     // Allocate memory for full path (freed by user)
-    char *file = calloc(strlen(dir_cpy) + strlen(list) + 6, sizeof(char));
+    char *file = malloc((strlen(dir_cpy) + strlen(list) + 6) * sizeof(char));
     // Choose format based on whether there is a trailing slash already
     const char *path_format =
         has_trailing_slash(dir_cpy) ? "%s%s.txt" : "%s/%s.txt";
@@ -92,16 +92,18 @@ char **get_files(const char *dir, char **lists) {
     char **files;
     if (i == 0) {
         // No lists given, allocate memory for default list + terminator
-        files = calloc(2, sizeof(char *));
+        files = malloc(2 * sizeof(char *));
         // Build path to default list
         if ((files[0] = get_file(dir, NULL)) == NULL) {
             // Free the empty array
             free(files);
             return NULL;
         }
+        // Add terminator
+        files[1] = NULL;
     } else {
         // Some lists were given, allocate memory for them + terminator
-        files = calloc(i + 1, sizeof(char *));
+        files = malloc((i + 1) * sizeof(char *));
         // Iterate over lists, building paths
         int y;
         for (y = 0; y < i; y++) {
@@ -115,9 +117,9 @@ char **get_files(const char *dir, char **lists) {
                 return NULL;
             }
         }
+        // Add terminator
+        files[i] = NULL;
     }
-    // Since we calloc'ed our array, the final extra element is already NULL,
-    // so we don't need to explicitly assign that to have it act as terminator
 
     return files;
 }
