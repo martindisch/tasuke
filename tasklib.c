@@ -136,12 +136,11 @@ const char *add(const char *file, char **tasks) {
     }
 
     // Write all tasks to file
-    while (*tasks) {
+    for ( ; *tasks; tasks++) {
         if (fprintf(fp, "%s\n", *tasks) < 0) {
             fclose(fp);
             return "Unable to write to file\n";
         }
-        tasks++;
     }
 
     // Close file
@@ -176,7 +175,7 @@ const char *done(const char *file, char **positions) {
 
 const char *list(char **files) {
     // Iterate over path array until terminator is encountered
-    while (*files) {
+    for ( ; *files; files++) {
         // Initialize TaskList ADT
         TaskList list = tasklist_init(*files);
         // Attempt reading current list
@@ -189,7 +188,6 @@ const char *list(char **files) {
         tasklist_print(list);
         // Cleanup
         tasklist_destroy(list);
-        files++;
     }
 
     return NULL;
