@@ -96,5 +96,29 @@ char *tasklist_read(TaskList list, const char *file) {
 }
 
 char *tasklist_write(TaskList list, const char *file) {
-    return "Not yet implemented\n";
+    // Open file in write mode
+    FILE *fp;
+    if ((fp = fopen(file, "w")) == NULL) {
+        return "Unable to open task list\n";
+    }
+
+    // Write all tasks to file
+    int i;
+    for (i = 0; i < list->length; i++) {
+        // Check if task exists
+        if (list->tasks[i]) {
+            // Attempt write
+            if (fputs(list->tasks[i], fp) == EOF) {
+                fclose(fp);
+                return "Unable to write to file\n";
+            }
+        }
+    }
+
+    // Close file
+    if (fclose(fp) == EOF) {
+        return "Unable to close file\n";
+    }
+
+    return NULL;
 }
