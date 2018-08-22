@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <limits.h>
+#include <errno.h>
 #include "tasklist.h"
 
 #define STARTING_CAPACITY 16
@@ -58,7 +59,28 @@ void tasklist_print(TaskList list) {
 }
 
 char *tasklist_done(TaskList list, char **positions) {
-    return "Not yet implemented\n";
+    // Reset errno to use it for error checking in strtol
+    errno = 0;
+    // Iterate over all positional arguments
+    for ( ; *positions; positions++) {
+        char *endptr;
+        long position = strtol(*positions, &endptr, 10);
+        // Handle conversion error
+        if (errno || *endptr != '\0') {
+            return "Not a number\n";
+        }
+        // Handle position out of range
+        if (position < 1 || position > list->length) {
+            return "No task at this position\n";
+        }
+        // Turn 1-based position into 0-based index
+        long index = position - 1;
+        // Remove task from list
+        free(list->tasks[index]);
+        list->tasks[index] = NULL;
+    }
+
+    return NULL;
 }
 
 char *tasklist_read(TaskList list, const char *file) {
