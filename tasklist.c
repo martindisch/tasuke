@@ -32,7 +32,7 @@ TaskList tasklist_init(const char *name) {
 void tasklist_destroy(TaskList list) {
     // Free content of tasks array
     int i;
-    for (i = 0; i < list->array_size; i++) {
+    for (i = 0; i < list->length; i++) {
         // Only free if it wasn't already (i.e. task was removed)
         if (list->tasks[i]) {
             free(list->tasks[i]);
