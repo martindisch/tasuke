@@ -153,7 +153,25 @@ const char *add(const char *file, char **tasks) {
 }
 
 const char *done(const char *file, char **positions) {
-    return "Not yet implemented\n";
+    // Build TaskList ADT
+    TaskList list = tasklist_init(file);
+    // Try reading the list
+    char *error = tasklist_read(list, file);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Try deleting tasks
+    error = tasklist_done(list, positions);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Try writing the updated list to file
+    error = tasklist_write(list, file);
+    tasklist_destroy(list);
+
+    return error;
 }
 
 const char *list(char **files) {
