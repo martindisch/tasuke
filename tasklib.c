@@ -15,7 +15,7 @@
 
 static int has_trailing_slash(const char *path) {
     // Iterate over string until we find the end
-    while (*path != '\0') path++;
+    while (*path != '\0') ++path;
     // Compare last character (before terminator) with slash
     return *(path - 1) == '/';
 }
@@ -87,7 +87,7 @@ char *get_file(const char *dir, const char *list) {
 char **get_files(const char *dir, char **lists) {
     // Get number of lists by iterating over array until NULL terminator found
     int i;
-    for (i = 0; lists[i]; i++);
+    for (i = 0; lists[i]; ++i);
 
     // Build path array
     char **files;
@@ -107,10 +107,10 @@ char **get_files(const char *dir, char **lists) {
         files = malloc((i + 1) * sizeof(char *));
         // Iterate over lists, building paths
         int y;
-        for (y = 0; y < i; y++) {
+        for (y = 0; y < i; ++y) {
             if ((files[y] = get_file(dir, lists[y])) == NULL) {
                 // Free paths we've already acquired at this point
-                for (y--; y >= 0; y--) {
+                for (--y; y >= 0; --y) {
                     free(files[y]);
                 }
                 // Free the empty array
@@ -137,7 +137,7 @@ const char *add(const char *file, char **tasks) {
     }
 
     // Write all tasks to file
-    for ( ; *tasks; tasks++) {
+    for ( ; *tasks; ++tasks) {
         if (fprintf(fp, "%s\n", *tasks) < 0) {
             fclose(fp);
             return "Unable to write to file\n";
@@ -159,7 +159,7 @@ const char *insert(const char *file, char **position_task) {
     long position = -1;
     const char *task = NULL;
     int i;
-    for (i = 0; *position_task; position_task++, i++) {
+    for (i = 0; *position_task; ++position_task, ++i) {
         if (i == 0) {
             // Extract position
             errno = 0;
@@ -230,7 +230,7 @@ const char *done(const char *file, char **positions) {
 
 const char *list(char **files) {
     // Iterate over path array until terminator is encountered
-    for ( ; *files; files++) {
+    for ( ; *files; ++files) {
         // Initialize TaskList ADT
         TaskList list = tasklist_init(*files);
         // Attempt reading current list
@@ -250,7 +250,7 @@ const char *list(char **files) {
 
 const char *delete(char **files) {
     // Iterate over path array until terminator is encountered
-    for ( ; *files; files++) {
+    for ( ; *files; ++files) {
         // Attempt unlinking
         if (unlink(*files) != 0) {
             return "Unable to delete list\n";

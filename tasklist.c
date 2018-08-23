@@ -32,7 +32,7 @@ TaskList tasklist_init(const char *name) {
 void tasklist_destroy(TaskList list) {
     // Free content of tasks array
     int i;
-    for (i = 0; i < list->length; i++) {
+    for (i = 0; i < list->length; ++i) {
         // Only free if it wasn't already (i.e. task was removed)
         if (list->tasks[i]) {
             free(list->tasks[i]);
@@ -51,7 +51,7 @@ void tasklist_print(TaskList list) {
     printf("%s:\n", list->name);
     // Print tasks
     int i;
-    for (i = 0; i < list->length; i++) {
+    for (i = 0; i < list->length; ++i) {
         printf("  [%d] %s", i + 1, list->tasks[i]);
     }
     // Print empty line for visual separation between lists
@@ -70,7 +70,7 @@ const char *tasklist_insert(TaskList list, long position, const char *task) {
     if (list->array_size == list->length) {
         list->tasks = realloc(
             list->tasks, (list->array_size + 1) * sizeof(char *));
-        list->array_size++;
+        ++(list->array_size);
     }
     // Allocate memory for the task
     char *new_task = malloc((strlen(task) + 2) * sizeof(char));
@@ -89,14 +89,14 @@ const char *tasklist_insert(TaskList list, long position, const char *task) {
         // Normal case: insert somewhere and bubble other elements down
         char *current, *previous = new_task;
         int i;
-        for (i = index; i < list->length + 1; i++) {
+        for (i = index; i < list->length + 1; ++i) {
             current = list->tasks[i];
             list->tasks[i] = previous;
             previous = current;
         }
     }
     // Increment length
-    list->length++;
+    ++(list->length);
 
     return NULL;
 }
@@ -105,7 +105,7 @@ const char *tasklist_done(TaskList list, char **positions) {
     // Reset errno to use it for error checking in strtol
     errno = 0;
     // Iterate over all positional arguments
-    for ( ; *positions; positions++) {
+    for ( ; *positions; ++positions) {
         char *endptr;
         long position = strtol(*positions, &endptr, 10);
         // Handle conversion error
@@ -149,7 +149,7 @@ const char *tasklist_read(TaskList list, const char *file) {
         strcpy(task, line);
         // Add task to list
         list->tasks[i++] = task;
-        list->length++;
+        ++(list->length);
     }
 
     // Close file
@@ -169,7 +169,7 @@ const char *tasklist_write(TaskList list, const char *file) {
 
     // Write all tasks to file
     int i;
-    for (i = 0; i < list->length; i++) {
+    for (i = 0; i < list->length; ++i) {
         // Check if task exists
         if (list->tasks[i]) {
             // Attempt write
