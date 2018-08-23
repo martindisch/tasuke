@@ -110,7 +110,7 @@ char *tasklist_done(TaskList list, char **positions) {
         long position = strtol(*positions, &endptr, 10);
         // Handle conversion error
         if (errno || *endptr != '\0') {
-            return "Not a number\n";
+            return "Position not a number\n";
         }
         // Handle position out of range
         if (position < 1 || position > list->length) {

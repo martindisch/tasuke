@@ -167,7 +167,7 @@ const char *insert(const char *file, char **position_task) {
             position = strtol(*position_task, &endptr, 10);
             // Handle conversion error
             if (errno || *endptr != '\0') {
-                return "Not a number\n";
+                return "Position not a number\n";
             }
         } else if (i == 1) {
             // Extract task text
