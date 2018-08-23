@@ -54,8 +54,8 @@ t -a -n mylist "First task" "Second task"   # Add to specific list
 
 **Insert task** by inserting at given position, shifting other items downwards
 ```
-t -i "My task" 3                            # Insert into default list
-t -i -n mylist "My task" 3                  # Insert into specific list
+t -i 3 "My task"                            # Insert into default list
+t -i -n mylist 3 "My task"                  # Insert into specific list
 ```
 
 **Complete task(s)**

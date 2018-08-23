@@ -6,7 +6,7 @@
 static const char *usage =
     "Usage: %1$s [-s directory] [LIST]...\n"
     "  or   %1$s -a [-n list] [-s directory] TASK...\n"
-    "  or   %1$s -i [-n list] [-s directory] TASK POSITION\n"
+    "  or   %1$s -i [-n list] [-s directory] POSITION TASK\n"
     "  or   %1$s -d [-n list] [-s directory] POSITION...\n"
     "  or   %1$s -m [-n list] [-s directory] PREV_POS NEW_POS\n"
     "  or   %1$s -r [-s directory] [LIST]...\n"
