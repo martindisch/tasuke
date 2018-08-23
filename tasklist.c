@@ -58,7 +58,7 @@ void tasklist_print(TaskList list) {
     printf("\n");
 }
 
-char *tasklist_insert(TaskList list, long position, const char *task) {
+const char *tasklist_insert(TaskList list, long position, const char *task) {
     /*
      * Preparatory work: sanity check, memory allocation
      */
@@ -101,7 +101,7 @@ char *tasklist_insert(TaskList list, long position, const char *task) {
     return NULL;
 }
 
-char *tasklist_done(TaskList list, char **positions) {
+const char *tasklist_done(TaskList list, char **positions) {
     // Reset errno to use it for error checking in strtol
     errno = 0;
     // Iterate over all positional arguments
@@ -126,7 +126,7 @@ char *tasklist_done(TaskList list, char **positions) {
     return NULL;
 }
 
-char *tasklist_read(TaskList list, const char *file) {
+const char *tasklist_read(TaskList list, const char *file) {
     // Open file in read mode
     FILE *fp;
     if ((fp = fopen(file, "r")) == NULL) {
@@ -160,7 +160,7 @@ char *tasklist_read(TaskList list, const char *file) {
     return NULL;
 }
 
-char *tasklist_write(TaskList list, const char *file) {
+const char *tasklist_write(TaskList list, const char *file) {
     // Open file in write mode
     FILE *fp;
     if ((fp = fopen(file, "w")) == NULL) {

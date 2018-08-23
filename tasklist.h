@@ -35,7 +35,7 @@ void tasklist_print(TaskList list);
  * @param task The task text
  * @return Error message or NULL on success
  */
-char *tasklist_insert(TaskList list, long position, const char *task);
+const char *tasklist_insert(TaskList list, long position, const char *task);
 
 /**
  * Removes the tasks at the given positions from the list.
@@ -45,7 +45,7 @@ char *tasklist_insert(TaskList list, long position, const char *task);
  *                  by a NULL element
  * @return Error message or NULL on success
  */
-char *tasklist_done(TaskList list, char **positions);
+const char *tasklist_done(TaskList list, char **positions);
 
 /**
  * Build the TaskList based on the file at the given path.
@@ -54,7 +54,7 @@ char *tasklist_done(TaskList list, char **positions);
  * @param file Full path to file
  * @return Error message or NULL on success
  */
-char *tasklist_read(TaskList list, const char *file);
+const char *tasklist_read(TaskList list, const char *file);
 
 /**
  * Writes the TaskList to the file at the given path.
@@ -63,6 +63,6 @@ char *tasklist_read(TaskList list, const char *file);
  * @param file Full path to file
  * @return Error message or NULL on success
  */
-char *tasklist_write(TaskList list, const char *file);
+const char *tasklist_write(TaskList list, const char *file);
 
 #endif // TASKLIST_H

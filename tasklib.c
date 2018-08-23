@@ -188,7 +188,7 @@ const char *insert(const char *file, char **position_task) {
      // Build TaskList ADT
      TaskList list = tasklist_init(file);
      // Try reading the list
-     char *error = tasklist_read(list, file);
+     const char *error = tasklist_read(list, file);
      if (error) {
          tasklist_destroy(list);
          return error;
@@ -210,7 +210,7 @@ const char *done(const char *file, char **positions) {
     // Build TaskList ADT
     TaskList list = tasklist_init(file);
     // Try reading the list
-    char *error = tasklist_read(list, file);
+    const char *error = tasklist_read(list, file);
     if (error) {
         tasklist_destroy(list);
         return error;
@@ -234,7 +234,7 @@ const char *list(char **files) {
         // Initialize TaskList ADT
         TaskList list = tasklist_init(*files);
         // Attempt reading current list
-        char *error = tasklist_read(list, *files);
+        const char *error = tasklist_read(list, *files);
         if (error) {
             tasklist_destroy(list);
             return error;
