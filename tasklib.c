@@ -5,6 +5,7 @@
 #include <string.h>
 #include <limits.h>
 #include <sys/stat.h>
+#include <errno.h>
 #include "tasklib.h"
 #include "tasklist.h"
 
@@ -149,6 +150,60 @@ const char *add(const char *file, char **tasks) {
     }
 
     return NULL;
+}
+
+const char *insert(const char *file, char **position_task) {
+    /*
+     * Extract position and task argument, checking for sanity
+     */
+    long position = -1;
+    const char *task = NULL;
+    int i;
+    for (i = 0; *position_task; position_task++, i++) {
+        if (i == 0) {
+            // Extract position
+            errno = 0;
+            char *endptr;
+            position = strtol(*position_task, &endptr, 10);
+            // Handle conversion error
+            if (errno || *endptr != '\0') {
+                return "Not a number\n";
+            }
+        } else if (i == 1) {
+            // Extract task text
+            task = *position_task;
+        } else {
+            // There is an additional invalid argument
+            return "Too many arguments\n";
+        }
+    }
+    // Abort if we don't have all required arguments
+    if (position == -1 || task == NULL) {
+        return "Not enough arguments\n";
+    }
+
+    /*
+     * Use TaskList to handle the insertion
+     */
+     // Build TaskList ADT
+     TaskList list = tasklist_init(file);
+     // Try reading the list
+     char *error = tasklist_read(list, file);
+     if (error) {
+         tasklist_destroy(list);
+         return error;
+     }
+     // Try inserting the task
+     error = tasklist_insert(list, position, task);
+     if (error) {
+         tasklist_destroy(list);
+         return error;
+     }
+     // Try writing the updated list to file
+     error = tasklist_write(list, file);
+     tasklist_destroy(list);
+
+    return error;
 }
 
 const char *done(const char *file, char **positions) {

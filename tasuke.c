@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
     if (aflg) {
         error = add(file, &argv[optind]);
     } else if (iflg) {
-        error = "Not yet implemented\n";
+        error = insert(file, &argv[optind]);
     } else if (dflg) {
         error = done(file, &argv[optind]);
     } else if (mflg) {

@@ -11,6 +11,18 @@
 const char *add(const char *file, char **tasks);
 
 /**
+ * Inserts a task into a list at a specific position.
+ *
+ * Any existing items at that position and after are pushed down.
+ *
+ * @param file Full path to file
+ * @param position_task Array containing the position (1-based, string), task
+ *                      text and a terminating NULL element
+ * @return Error message or NULL on success
+ */
+const char *insert(const char *file, char **position_task);
+
+/**
  * Deletes tasks from a list.
  *
  * @param file Full path to file
