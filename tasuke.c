@@ -130,7 +130,7 @@ int main(int argc, char **argv) {
     } else if (mflg) {
         error = "Not yet implemented\n";
     } else if (rflg) {
-        error = "Not yet implemented\n";
+        error = delete(files);
     } else {
         // No command flag (= list command)
         error = list(files);

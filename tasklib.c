@@ -247,3 +247,15 @@ const char *list(char **files) {
 
     return NULL;
 }
+
+const char *delete(char **files) {
+    // Iterate over path array until terminator is encountered
+    for ( ; *files; files++) {
+        // Attempt unlinking
+        if (unlink(*files) != 0) {
+            return "Unable to delete list\n";
+        }
+    }
+
+    return NULL;
+}

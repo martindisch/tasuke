@@ -41,6 +41,14 @@ const char *done(const char *file, char **positions);
 const char *list(char **files);
 
 /**
+ * Deletes task lists.
+ *
+ * @param files Array of file paths, terminated by a NULL element
+ * @return Error message or NULL on success
+ */
+const char *delete(char **files);
+
+/**
  * Builds a full path to the task list file based on directory and list name.
  *
  * If the directory is NULL, the default will be used, which is .tasuke
