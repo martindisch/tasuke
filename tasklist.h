@@ -26,6 +26,18 @@ void tasklist_destroy(TaskList list);
 void tasklist_print(TaskList list);
 
 /**
+ * Inserts a task into a list at a specific position.
+ *
+ * Any existing items at that position and after are pushed down.
+ *
+ * @param list The TaskList
+ * @param position The position to insert to (1-based)
+ * @param task The task text
+ * @return Error message or NULL on success
+ */
+char *tasklist_insert(TaskList list, long position, const char *task);
+
+/**
  * Removes the tasks at the given positions from the list.
  *
  * @param list The TaskList

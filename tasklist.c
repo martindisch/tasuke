@@ -58,6 +58,49 @@ void tasklist_print(TaskList list) {
     printf("\n");
 }
 
+char *tasklist_insert(TaskList list, long position, const char *task) {
+    /*
+     * Preparatory work: sanity check, memory allocation
+     */
+    // Handle position out of range
+    if (position < 1 || position > list->length + 1) {
+        return "Invalid position\n";
+    }
+    // If the task array is full, allocate memory for an additional element
+    if (list->array_size == list->length) {
+        list->tasks = realloc(
+            list->tasks, (list->array_size + 1) * sizeof(char *));
+        list->array_size++;
+    }
+    // Allocate memory for the task
+    char *new_task = malloc((strlen(task) + 2) * sizeof(char));
+    // Copy the task into the new memory, appending newline
+    sprintf(new_task, "%s\n", task);
+    // Turn 1-based position into 0-based index
+    long index = position - 1;
+
+    /*
+     * Insertion
+     */
+    if (index == list->length) {
+        // Simple case: append task to end
+        list->tasks[list->length] = new_task;
+    } else {
+        // Normal case: insert somewhere and bubble other elements down
+        char *current, *previous = new_task;
+        int i;
+        for (i = index; i < list->length + 1; i++) {
+            current = list->tasks[i];
+            list->tasks[i] = previous;
+            previous = current;
+        }
+    }
+    // Increment length
+    list->length++;
+
+    return NULL;
+}
+
 char *tasklist_done(TaskList list, char **positions) {
     // Reset errno to use it for error checking in strtol
     errno = 0;
