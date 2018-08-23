@@ -114,7 +114,7 @@ const char *tasklist_done(TaskList list, char **positions) {
         }
         // Handle position out of range
         if (position < 1 || position > list->length) {
-            return "No task at this position\n";
+            return "Invalid position\n";
         }
         // Turn 1-based position into 0-based index
         long index = position - 1;
@@ -130,7 +130,7 @@ const char *tasklist_read(TaskList list, const char *file) {
     // Open file in read mode
     FILE *fp;
     if ((fp = fopen(file, "r")) == NULL) {
-        return "Unable to open task list\n";
+        return "Unable to open list\n";
     }
 
     // Read tasks
@@ -154,7 +154,7 @@ const char *tasklist_read(TaskList list, const char *file) {
 
     // Close file
     if (fclose(fp) == EOF) {
-        return "Unable to close file\n";
+        return "Unable to close list\n";
     }
 
     return NULL;
@@ -164,7 +164,7 @@ const char *tasklist_write(TaskList list, const char *file) {
     // Open file in write mode
     FILE *fp;
     if ((fp = fopen(file, "w")) == NULL) {
-        return "Unable to open task list\n";
+        return "Unable to open list\n";
     }
 
     // Write all tasks to file
@@ -175,14 +175,14 @@ const char *tasklist_write(TaskList list, const char *file) {
             // Attempt write
             if (fputs(list->tasks[i], fp) == EOF) {
                 fclose(fp);
-                return "Unable to write to file\n";
+                return "Unable to write to list\n";
             }
         }
     }
 
     // Close file
     if (fclose(fp) == EOF) {
-        return "Unable to close file\n";
+        return "Unable to close list\n";
     }
 
     return NULL;
