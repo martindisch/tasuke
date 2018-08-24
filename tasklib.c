@@ -129,7 +129,7 @@ char **get_files(const char *dir, char **lists) {
  * Commands
  */
 
-const char *add(const char *file, char **tasks) {
+const char *tasklib_add(const char *file, char **tasks) {
     // Open file in append mode
     FILE *fp;
     if ((fp = fopen(file, "a")) == NULL) {
@@ -152,7 +152,7 @@ const char *add(const char *file, char **tasks) {
     return NULL;
 }
 
-const char *insert(const char *file, char **position_task) {
+const char *tasklib_insert(const char *file, char **position_task) {
     /*
      * Extract position and task argument, checking for sanity
      */
@@ -206,7 +206,7 @@ const char *insert(const char *file, char **position_task) {
     return error;
 }
 
-const char *done(const char *file, char **positions) {
+const char *tasklib_done(const char *file, char **positions) {
     // Build TaskList ADT
     TaskList list = tasklist_init(file);
     // Try reading the list
@@ -228,7 +228,7 @@ const char *done(const char *file, char **positions) {
     return error;
 }
 
-const char *list(char **files) {
+const char *tasklib_list(char **files) {
     // Iterate over path array until terminator is encountered
     for ( ; *files; ++files) {
         // Initialize TaskList ADT
@@ -248,7 +248,7 @@ const char *list(char **files) {
     return NULL;
 }
 
-const char *move(const char *file, char **from_to) {
+const char *tasklib_move(const char *file, char **from_to) {
     /*
      * Extract position arguments, checking for sanity
      */
@@ -307,7 +307,7 @@ const char *move(const char *file, char **from_to) {
     return error;
 }
 
-const char *delete(char **files) {
+const char *tasklib_remove(char **files) {
     // Iterate over path array until terminator is encountered
     for ( ; *files; ++files) {
         // Attempt unlinking

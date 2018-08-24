@@ -122,18 +122,18 @@ int main(int argc, char **argv) {
      */
     const char *error = NULL;
     if (aflg) {
-        error = add(file, &argv[optind]);
+        error = tasklib_add(file, &argv[optind]);
     } else if (iflg) {
-        error = insert(file, &argv[optind]);
+        error = tasklib_insert(file, &argv[optind]);
     } else if (dflg) {
-        error = done(file, &argv[optind]);
+        error = tasklib_done(file, &argv[optind]);
     } else if (mflg) {
-        error = move(file, &argv[optind]);
+        error = tasklib_move(file, &argv[optind]);
     } else if (rflg) {
-        error = delete(files);
+        error = tasklib_remove(files);
     } else {
         // No command flag (= list command)
-        error = list(files);
+        error = tasklib_list(files);
     }
 
     /*

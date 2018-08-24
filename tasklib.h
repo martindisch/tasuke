@@ -8,7 +8,7 @@
  * @param tasks Array of tasks, terminated by a NULL element
  * @return Error message or NULL on success
  */
-const char *add(const char *file, char **tasks);
+const char *tasklib_add(const char *file, char **tasks);
 
 /**
  * Inserts a task into a list at a specific position.
@@ -20,7 +20,7 @@ const char *add(const char *file, char **tasks);
  *                      text and a terminating NULL element
  * @return Error message or NULL on success
  */
-const char *insert(const char *file, char **position_task);
+const char *tasklib_insert(const char *file, char **position_task);
 
 /**
  * Deletes tasks from a list.
@@ -30,7 +30,7 @@ const char *insert(const char *file, char **position_task);
  *                  by a NULL element
  * @return Error message or NULL on success
  */
-const char *done(const char *file, char **positions);
+const char *tasklib_done(const char *file, char **positions);
 
 /**
  * Prints task lists to stdout.
@@ -38,7 +38,7 @@ const char *done(const char *file, char **positions);
  * @param files Array of file paths, terminated by a NULL element
  * @return Error message or NULL on success
  */
-const char *list(char **files);
+const char *tasklib_list(char **files);
 
 /**
  * Moves a task inside a list by bubbling it up or down.
@@ -48,7 +48,7 @@ const char *list(char **files);
  *                (1-based, type string), terminated by a NULL element
  * @return Error message or NULL on success
  */
-const char *move(const char *file, char **from_to);
+const char *tasklib_move(const char *file, char **from_to);
 
 /**
  * Deletes task lists.
@@ -56,7 +56,7 @@ const char *move(const char *file, char **from_to);
  * @param files Array of file paths, terminated by a NULL element
  * @return Error message or NULL on success
  */
-const char *delete(char **files);
+const char *tasklib_remove(char **files);
 
 /**
  * Builds a full path to the task list file based on directory and list name.
