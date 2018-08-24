@@ -126,6 +126,43 @@ const char *tasklist_done(TaskList list, char **positions) {
     return NULL;
 }
 
+const char *tasklist_move(TaskList list, long from_pos, long to_pos) {
+    /*
+     * Preparatory work with sanity checking
+     */
+    // Handle positions out of range
+    if (from_pos < 1 || from_pos > list->length ||
+        to_pos < 1 || to_pos > list->length) {
+        return "Invalid position\n";
+    }
+    // Abort when there's nothing to do
+    if (from_pos == to_pos) {
+        return NULL;
+    }
+    // Turn 1-based positions into 0-based indices
+    long from = from_pos - 1, to = to_pos - 1;
+
+    /*
+     * Movement
+     */
+    int i;
+    if (from < to) {
+        for (i = from; i < to; ++i) {
+            char *current = list->tasks[i];
+            list->tasks[i] = list->tasks[i + 1];
+            list->tasks[i + 1] = current;
+        }
+    } else {
+        for (i = from; i > to; --i) {
+            char *current = list->tasks[i];
+            list->tasks[i] = list->tasks[i - 1];
+            list->tasks[i - 1] = current;
+        }
+    }
+
+    return NULL;
+}
+
 const char *tasklist_read(TaskList list, const char *file) {
     // Open file in read mode
     FILE *fp;

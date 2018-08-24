@@ -48,6 +48,16 @@ const char *tasklist_insert(TaskList list, long position, const char *task);
 const char *tasklist_done(TaskList list, char **positions);
 
 /**
+ * Moves a task inside a list by bubbling it up or down.
+ *
+ * @param list The TaskList
+ * @param from The source position (1-based)
+ * @param to The destination position (1-based)
+ * @return Error message or NULL on success
+ */
+const char *tasklist_move(TaskList list, long from, long to);
+
+/**
  * Build the TaskList based on the file at the given path.
  *
  * @param list The TaskList
