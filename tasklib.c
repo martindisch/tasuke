@@ -185,23 +185,23 @@ const char *insert(const char *file, char **position_task) {
     /*
      * Use TaskList to handle the insertion
      */
-     // Build TaskList ADT
-     TaskList list = tasklist_init(file);
-     // Try reading the list
-     const char *error = tasklist_read(list, file);
-     if (error) {
-         tasklist_destroy(list);
-         return error;
-     }
-     // Try inserting the task
-     error = tasklist_insert(list, position, task);
-     if (error) {
-         tasklist_destroy(list);
-         return error;
-     }
-     // Try writing the updated list to file
-     error = tasklist_write(list, file);
-     tasklist_destroy(list);
+    // Build TaskList ADT
+    TaskList list = tasklist_init(file);
+    // Try reading the list
+    const char *error = tasklist_read(list, file);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Try inserting the task
+    error = tasklist_insert(list, position, task);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Try writing the updated list to file
+    error = tasklist_write(list, file);
+    tasklist_destroy(list);
 
     return error;
 }
