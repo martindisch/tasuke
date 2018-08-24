@@ -248,6 +248,65 @@ const char *list(char **files) {
     return NULL;
 }
 
+const char *move(const char *file, char **from_to) {
+    /*
+     * Extract position arguments, checking for sanity
+     */
+    long from_pos = -1, to_pos = -1;
+    int i;
+    for (i = 0; *from_to; ++from_to, ++i) {
+        if (i == 0) {
+            // Extract from position
+            errno = 0;
+            char *endptr;
+            from_pos = strtol(*from_to, &endptr, 10);
+            // Handle conversion error
+            if (errno || *endptr != '\0') {
+                return "Position not a number\n";
+            }
+        } else if (i == 1) {
+            // Extract to position
+            errno = 0;
+            char *endptr;
+            to_pos = strtol(*from_to, &endptr, 10);
+            // Handle conversion error
+            if (errno || *endptr != '\0') {
+                return "Position not a number\n";
+            }
+        } else {
+            // There is an additional invalid argument
+            return "Too many arguments\n";
+        }
+    }
+    // Abort if we don't have all required arguments
+    if (from_pos == -1 || to_pos == -1) {
+        return "Not enough arguments\n";
+    }
+
+    /*
+     * Use TaskList to handle the insertion
+     */
+    // Build TaskList ADT
+    TaskList list = tasklist_init(file);
+    // Try reading the list
+    const char *error = tasklist_read(list, file);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Try inserting the task
+    error = tasklist_move(list, from_pos, to_pos);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Try writing the updated list to file
+    error = tasklist_write(list, file);
+    tasklist_destroy(list);
+
+    return error;
+}
+
 const char *delete(char **files) {
     // Iterate over path array until terminator is encountered
     for ( ; *files; ++files) {

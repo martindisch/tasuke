@@ -128,7 +128,7 @@ int main(int argc, char **argv) {
     } else if (dflg) {
         error = done(file, &argv[optind]);
     } else if (mflg) {
-        error = "Not yet implemented\n";
+        error = move(file, &argv[optind]);
     } else if (rflg) {
         error = delete(files);
     } else {

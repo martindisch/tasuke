@@ -41,6 +41,16 @@ const char *done(const char *file, char **positions);
 const char *list(char **files);
 
 /**
+ * Moves a task inside a list by bubbling it up or down.
+ *
+ * @param file Full path to file
+ * @param from_to Array containing the source and destination positions
+ *                (1-based, type string), terminated by a NULL element
+ * @return Error message or NULL on success
+ */
+const char *move(const char *file, char **from_to);
+
+/**
  * Deletes task lists.
  *
  * @param files Array of file paths, terminated by a NULL element
