@@ -63,8 +63,7 @@ t -i -n mylist 3 "My task"                  # Insert into specific list
 t -d 3 10 7                                 # Complete from default list
 t -d -n mylist 3 10 7                       # Complete from specific list
 ```
-
-**Move task** by inserting at given position, shifting other items downwards
+**Move task** from one position to another, by bubbling it up or down
 ```
 t -m 3 5                                    # Move inside default list
 t -m -n mylist 3 5                          # Move inside specific list
