@@ -57,7 +57,8 @@ void tasklist_print(TaskList list) {
     printf("\n");
 }
 
-const char *tasklist_insert(TaskList list, long position, const char *task) {
+const char *tasklist_insert(
+    TaskList list, long position, const char *task) {
     /*
      * Preparatory work: sanity check, memory allocation
      */
@@ -65,7 +66,7 @@ const char *tasklist_insert(TaskList list, long position, const char *task) {
     if (position < 1 || position > list->length + 1) {
         return "Invalid position\n";
     }
-    // If the task array is full, allocate memory for an additional element
+    // If task array is full, allocate memory for an additional element
     if (list->array_size == list->length) {
         list->tasks = realloc(
             list->tasks, (list->array_size + 1) * sizeof(char *));
