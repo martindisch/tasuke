@@ -13,6 +13,12 @@
  * Private helper functions
  */
 
+ /**
+  * Return whether the path ends with a slash.
+  *
+  * @param path The path to check
+  * @return 0 if there is no trailing slash
+  */
 static int has_trailing_slash(const char *path) {
     // Iterate over string until we find the end
     while (*path != '\0') ++path;
@@ -20,6 +26,12 @@ static int has_trailing_slash(const char *path) {
     return *(path - 1) == '/';
 }
 
+/**
+* Convert a position string to long, handling all possible errors.
+*
+* @param posarg The string position to convert
+* @return The position as a long or -1 on error
+*/
 static long strtopos(const char *posarg) {
     // Reset errno to use it for strtol error checking
     errno = 0;
