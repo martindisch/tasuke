@@ -20,6 +20,20 @@ static int has_trailing_slash(const char *path) {
     return *(path - 1) == '/';
 }
 
+static long strtopos(const char *posarg) {
+    // Reset errno to use it for strtol error checking
+    errno = 0;
+    // Will point to first character that is not a digit
+    char *endptr;
+    long position = strtol(posarg, &endptr, 10);
+    // Handle conversion error
+    if (errno || *endptr != '\0') {
+        return -1;
+    }
+
+    return position;
+}
+
 /*
  * Public helper functions
  */
@@ -162,11 +176,9 @@ const char *tasklib_insert(const char *file, char **position_task) {
     for (i = 0; *position_task; ++position_task, ++i) {
         if (i == 0) {
             // Extract position
-            errno = 0;
-            char *endptr;
-            position = strtol(*position_task, &endptr, 10);
+            position = strtopos(*position_task);
             // Handle conversion error
-            if (errno || *endptr != '\0') {
+            if (position == -1) {
                 return "Position not a number\n";
             }
         } else if (i == 1) {
@@ -214,15 +226,12 @@ const char *tasklib_done(const char *file, char **posargs) {
     long positions[length + 1];
     // Set terminator element
     positions[length] = -1;
-    // Reset errno to use it for error checking in strtol
-    errno = 0;
     // Iterate over all positional arguments, building array of positions
     int i;
     for (i = 0; i < length; ++i) {
-        char *endptr;
-        long position = strtol(posargs[i], &endptr, 10);
+        long position = strtopos(posargs[i]);
         // Handle conversion error
-        if (errno || *endptr != '\0') {
+        if (position == -1) {
             return "Position not a number\n";
         }
         positions[i] = position;
@@ -278,20 +287,16 @@ const char *tasklib_move(const char *file, char **from_to) {
     for (i = 0; *from_to; ++from_to, ++i) {
         if (i == 0) {
             // Extract from position
-            errno = 0;
-            char *endptr;
-            from_pos = strtol(*from_to, &endptr, 10);
+            from_pos = strtopos(*from_to);
             // Handle conversion error
-            if (errno || *endptr != '\0') {
+            if (from_pos == -1) {
                 return "Position not a number\n";
             }
         } else if (i == 1) {
             // Extract to position
-            errno = 0;
-            char *endptr;
-            to_pos = strtol(*from_to, &endptr, 10);
+            to_pos = strtopos(*from_to);
             // Handle conversion error
-            if (errno || *endptr != '\0') {
+            if (to_pos == -1) {
                 return "Position not a number\n";
             }
         } else {
