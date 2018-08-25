@@ -206,7 +206,28 @@ const char *tasklib_insert(const char *file, char **position_task) {
     return error;
 }
 
-const char *tasklib_done(const char *file, char **positions) {
+const char *tasklib_done(const char *file, char **posargs) {
+    // Determine number of positional arguments
+    int length;
+    for (length = 0; posargs[length]; ++length);
+    // Create array to store converted positions
+    long positions[length + 1];
+    // Set terminator element
+    positions[length] = -1;
+    // Reset errno to use it for error checking in strtol
+    errno = 0;
+    // Iterate over all positional arguments, building array of positions
+    int i;
+    for (i = 0; i < length; ++i) {
+        char *endptr;
+        long position = strtol(posargs[i], &endptr, 10);
+        // Handle conversion error
+        if (errno || *endptr != '\0') {
+            return "Position not a number\n";
+        }
+        positions[i] = position;
+    }
+
     // Build TaskList ADT
     TaskList list = tasklist_init(file);
     // Try reading the list

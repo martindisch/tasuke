@@ -41,11 +41,10 @@ const char *tasklist_insert(TaskList list, long position, const char *task);
  * Removes the tasks at the given positions from the list.
  *
  * @param list The TaskList
- * @param positions Array of task indices (1-based, type string), terminated
- *                  by a NULL element
+ * @param positions Array of task positions (1-based), terminated by -1
  * @return Error message or NULL on success
  */
-const char *tasklist_done(TaskList list, char **positions);
+const char *tasklist_done(TaskList list, const long *positions);
 
 /**
  * Moves a task inside a list by bubbling it up or down.
