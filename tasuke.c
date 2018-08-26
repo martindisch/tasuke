@@ -29,10 +29,8 @@ int main(int argc, char **argv) {
     /*
      * Flags & option argument variables for user input
      */
-    // Flags without option argument
-    int aflg = 0, iflg = 0, dflg = 0, mflg = 0, rflg = 0;
-    // Flags with option argument
-    int nflg = 0, sflg = 0;
+    // Flags that need to be checked for sanity (mutual exclusiveness, etc.)
+    int aflg = 0, iflg = 0, dflg = 0, mflg = 0, rflg = 0, nflg = 0;
     // Set to 1 if there is a problem parsing options
     int errflg = 0;
     // Pointers to option arguments
@@ -68,7 +66,6 @@ int main(int argc, char **argv) {
                 nvalue = optarg;
                 break;
             case 's':
-                sflg = 1;
                 svalue = optarg;
                 break;
             case ':':
