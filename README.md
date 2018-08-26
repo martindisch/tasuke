@@ -1,7 +1,7 @@
 # tasuke [WIP]
 
 <p align="center">
-    <img alt="tasuke kanji" width="50%" src="media/kanji_regular.svg"/>
+    <img alt="tasuke kanji" width="50%" src="kanji.svg"/>
 </p>
 
 ## Description
