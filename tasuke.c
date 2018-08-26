@@ -14,7 +14,7 @@ static const char *usage =
     "\n"
     "Options:\n"
     "  -a            Add tasks by appending them to a list\n"
-    "  -d            Delete tasks\n"
+    "  -d            Complete tasks and delete them\n"
     "  -h            Print usage information\n"
     "  -i            Insert a task into a list at a specific position\n"
     "  -m            Move a task inside a list from one position to another\n"
