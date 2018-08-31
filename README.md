@@ -80,5 +80,18 @@ t -r                                        # Delete default task list
 t -r mylist school                          # Delete specific lists
 ```
 
+## Installation
+Since tasuke uses only POSIX system interfaces, you should be able to compile
+it on almost every platform.
+Just run `make` and you're good to go.
+You'll probably want to add the executable to your `PATH` variable, or better
+yet, create an alias in your `.bashrc` or equivalent.
+An alias is very convenient if you want tasuke to store your lists in some
+other place than the default `.tasuke` directory, since you can add the `-s`
+option to the command. For example, you could use
+```
+alias t='/opt/tasuke/tasuke -s /home/user/Dropbox/tasuke'
+```
+
 ## License
 [MIT License](LICENSE)
