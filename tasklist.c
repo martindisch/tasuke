@@ -7,20 +7,20 @@
 #define STARTING_CAPACITY 16
 
 struct tasklist {
-    char *name;
+    char *path;
     char **tasks;
     int array_size;
     int length;
 };
 
-TaskList tasklist_init(const char *name) {
+TaskList tasklist_init(const char *path) {
     // Allocate memory for ADT
     TaskList list;
     list = malloc(sizeof(*list));
 
     // Initialize members
-    list->name = malloc((strlen(name) + 1) * sizeof(char));
-    strcpy(list->name, name);
+    list->path = malloc((strlen(path) + 1) * sizeof(char));
+    strcpy(list->path, path);
     list->tasks = malloc(STARTING_CAPACITY * sizeof(char *));
     list->array_size = STARTING_CAPACITY;
     list->length = 0;
@@ -40,14 +40,14 @@ void tasklist_destroy(TaskList list) {
     // Free tasks array
     free(list->tasks);
     // Free name
-    free(list->name);
+    free(list->path);
     // Free ADT
     free(list);
 }
 
 void tasklist_print(TaskList list) {
     // Print list name
-    printf("%s:\n", list->name);
+    printf("%s:\n", list->path);
     // Print tasks
     int i;
     for (i = 0; i < list->length; ++i) {
@@ -155,10 +155,10 @@ const char *tasklist_move(TaskList list, long from_pos, long to_pos) {
     return NULL;
 }
 
-const char *tasklist_read(TaskList list, const char *file) {
+const char *tasklist_read(TaskList list) {
     // Open file in read mode
     FILE *fp;
-    if ((fp = fopen(file, "r")) == NULL) {
+    if ((fp = fopen(list->path, "r")) == NULL) {
         return "Unable to open list\n";
     }
 
@@ -189,10 +189,10 @@ const char *tasklist_read(TaskList list, const char *file) {
     return NULL;
 }
 
-const char *tasklist_write(TaskList list, const char *file) {
+const char *tasklist_write(TaskList list) {
     // Open file in write mode
     FILE *fp;
-    if ((fp = fopen(file, "w")) == NULL) {
+    if ((fp = fopen(list->path, "w")) == NULL) {
         return "Unable to open list\n";
     }
 

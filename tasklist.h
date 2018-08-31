@@ -6,10 +6,10 @@ typedef struct tasklist *TaskList;
 /**
  * Returns an initialized TaskList.
  *
- * @param name The list's name
+ * @param path Full path to file
  * @return The new TaskList
  */
-TaskList tasklist_init(const char *name);
+TaskList tasklist_init(const char *path);
 
 /**
  * Releases the TaskList.
@@ -57,21 +57,19 @@ const char *tasklist_done(TaskList list, const long *positions);
 const char *tasklist_move(TaskList list, long from, long to);
 
 /**
- * Build the TaskList based on the file at the given path.
+ * Build the TaskList by reading it from file.
  *
  * @param list The TaskList
- * @param file Full path to file
  * @return Error message or NULL on success
  */
-const char *tasklist_read(TaskList list, const char *file);
+const char *tasklist_read(TaskList list);
 
 /**
- * Writes the TaskList to the file at the given path.
+ * Writes the TaskList to its file.
  *
  * @param list The TaskList
- * @param file Full path to file
  * @return Error message or NULL on success
  */
-const char *tasklist_write(TaskList list, const char *file);
+const char *tasklist_write(TaskList list);
 
 #endif // TASKLIST_H

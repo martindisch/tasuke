@@ -211,7 +211,7 @@ const char *tasklib_insert(const char *file, char **position_task) {
     // Build TaskList ADT
     TaskList list = tasklist_init(file);
     // Try reading the list
-    const char *error = tasklist_read(list, file);
+    const char *error = tasklist_read(list);
     if (error) {
         tasklist_destroy(list);
         return error;
@@ -223,7 +223,7 @@ const char *tasklib_insert(const char *file, char **position_task) {
         return error;
     }
     // Try writing the updated list to file
-    error = tasklist_write(list, file);
+    error = tasklist_write(list);
     tasklist_destroy(list);
 
     return error;
@@ -251,7 +251,7 @@ const char *tasklib_done(const char *file, char **posargs) {
     // Build TaskList ADT
     TaskList list = tasklist_init(file);
     // Try reading the list
-    const char *error = tasklist_read(list, file);
+    const char *error = tasklist_read(list);
     if (error) {
         tasklist_destroy(list);
         return error;
@@ -263,7 +263,7 @@ const char *tasklib_done(const char *file, char **posargs) {
         return error;
     }
     // Try writing the updated list to file
-    error = tasklist_write(list, file);
+    error = tasklist_write(list);
     tasklist_destroy(list);
 
     return error;
@@ -275,7 +275,7 @@ const char *tasklib_list(char **files) {
         // Initialize TaskList ADT
         TaskList list = tasklist_init(*files);
         // Attempt reading current list
-        const char *error = tasklist_read(list, *files);
+        const char *error = tasklist_read(list);
         if (error) {
             tasklist_destroy(list);
             return error;
@@ -326,7 +326,7 @@ const char *tasklib_move(const char *file, char **from_to) {
     // Build TaskList ADT
     TaskList list = tasklist_init(file);
     // Try reading the list
-    const char *error = tasklist_read(list, file);
+    const char *error = tasklist_read(list);
     if (error) {
         tasklist_destroy(list);
         return error;
@@ -338,7 +338,7 @@ const char *tasklib_move(const char *file, char **from_to) {
         return error;
     }
     // Try writing the updated list to file
-    error = tasklist_write(list, file);
+    error = tasklist_write(list);
     tasklist_destroy(list);
 
     return error;
