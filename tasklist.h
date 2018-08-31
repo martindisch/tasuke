@@ -57,7 +57,7 @@ const char *tasklist_done(TaskList list, const long *positions);
 const char *tasklist_move(TaskList list, long from, long to);
 
 /**
- * Build the TaskList by reading it from file.
+ * Builds the TaskList by reading it from file.
  *
  * @param list The TaskList
  * @return Error message or NULL on success

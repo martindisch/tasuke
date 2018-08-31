@@ -13,7 +13,7 @@
  */
 
  /**
-  * Return whether the path ends with a slash.
+  * Returns whether the path ends with a slash.
   *
   * @param path The path to check
   * @return 0 if there is no trailing slash
@@ -26,7 +26,7 @@ static int has_trailing_slash(const char *path) {
 }
 
 /**
-* Convert a position string to long, handling all possible errors.
+* Converts a position string to long, handling all possible errors.
 *
 * @param posarg The string position to convert
 * @return The position as a long or -1 on error
