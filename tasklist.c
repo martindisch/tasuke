@@ -50,8 +50,7 @@ TaskList tasklist_init(const char *path) {
     list = malloc(sizeof(*list));
 
     // Initialize members
-    list->path = malloc((strlen(path) + 1) * sizeof(char));
-    strcpy(list->path, path);
+    list->path = strdup(path);
     list->name = get_name(list->path);
     list->tasks = malloc(STARTING_CAPACITY * sizeof(char *));
     list->array_size = STARTING_CAPACITY;
@@ -205,10 +204,8 @@ const char *tasklist_read(TaskList list) {
                 list->tasks, 2 * list->array_size * sizeof(char *));
             list->array_size *= 2;
         }
-        // Allocate memory for the task
-        char *task = malloc((strlen(line) + 1) * sizeof(char));
-        // Copy the task into the new memory
-        strcpy(task, line);
+        // Make a copy of the task
+        char *task = strdup(line);
         // Add task to list
         list->tasks[i++] = task;
         ++(list->length);

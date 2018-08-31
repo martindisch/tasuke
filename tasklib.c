@@ -68,10 +68,8 @@ char *get_file(const char *dir, const char *list) {
         // Build the new directory path
         sprintf(dir_cpy, dir_format, dir);
     } else {
-        // Allocate memory for simple copy of dir
-        dir_cpy = malloc((strlen(dir) + 1) * sizeof(char));
-        // Since the user supplied a custom directory, just use this one
-        strcpy(dir_cpy, dir);
+        // Since the user supplied a directory, make a plain copy of this
+        dir_cpy = strdup(dir);
     }
     // If no list name was set, use the default
     if (!list) {
