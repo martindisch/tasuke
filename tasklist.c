@@ -44,6 +44,44 @@ static char *get_name(const char *path) {
     return name;
 }
 
+/**
+ * Copies at most n chars from src into dest, splitting at spaces.
+ *
+ * It returns a pointer to the next character after the space where the
+ * split was made.
+ * It's imperative that the string is at least n characters long, because this
+ * function does not check for the end.
+ * The dest buffer needs to be n + 1 bytes large for the \0 terminator.
+ *
+ * @param dest The buffer characters are copied into
+ * @param src The string characters are copied from
+ * @param n Maximum number of characters to copy
+ * @return Pointer to the character that should be printed next
+ */
+static const char *fold(char *dest, const char *src, int n) {
+    // Initialize end of copy (exclusive) to maximum number of characters,
+    // because that's where we'll split if there are no spaces
+    const char *end = src + n;
+    // This is the next character that should be printed
+    const char *next = src + n;
+    // Find the last space within n characters
+    int i;
+    for (i = 0; i <= n; ++i) {
+        if (src[i] == ' ') {
+            // Set end (exclusive) to the space
+            end = src + i;
+            // The character after that is the next one that should be printed
+            next = src + i + 1;
+        }
+    }
+    // Copy characters before the last space into the destination buffer
+    strncpy(dest, src, end - src);
+    // Terminate the string
+    dest[end - src] = '\0';
+
+    return next;
+}
+
 TaskList tasklist_init(const char *path) {
     // Allocate memory for ADT
     TaskList list;
@@ -81,18 +119,44 @@ void tasklist_print(TaskList list) {
     // Print list name
     printf("\e[4m\e[1m%s\e[0m\n", list->name);
     // Determine format (for padding) depending on number of tasks
-    char *format;
+    const char *format, *pad;
+    int space;
     if (list->length < 10) {
         format = " \e[1m%d\e[0m %s";
+        pad = "   ";
+        space = 80 - 3;
     } else if (list->length < 100) {
         format = " \e[1m%2d\e[0m %s";
+        pad = "    ";
+        space = 80 - 4;
     } else {
         format = " \e[1m%3d\e[0m %s";
+        pad = "     ";
+        space = 80 - 5;
     }
     // Print tasks
     int i;
     for (i = 0; i < list->length; ++i) {
-        printf(format, i + 1, list->tasks[i]);
+        if (strlen(list->tasks[i]) <= space + 1) {
+            // There is enough space to print the whole task on one line
+            printf(format, i + 1, list->tasks[i]);
+        } else {
+            // Need to split the task over several lines
+            const char *task = list->tasks[i];
+            char out[space + 1];
+            // Print the first line
+            task = fold(out, task, space);
+            printf(format, i + 1, out);
+            printf("\n");
+            // Print remaining lines
+            while (strlen(task) > space + 1) {
+                task = fold(out, task, space);
+                printf("%s%s\n", pad, out);
+
+            }
+            // Print final line
+            printf("%s%s", pad, task);
+        }
     }
 }
 
