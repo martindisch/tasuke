@@ -80,10 +80,19 @@ void tasklist_destroy(TaskList list) {
 void tasklist_print(TaskList list) {
     // Print list name
     printf("\e[4m\e[1m%s\e[0m\n", list->name);
+    // Determine format (for padding) depending on number of tasks
+    char *format;
+    if (list->length < 10) {
+        format = " \e[1m%d\e[0m %s";
+    } else if (list->length < 100) {
+        format = " \e[1m%2d\e[0m %s";
+    } else {
+        format = " \e[1m%3d\e[0m %s";
+    }
     // Print tasks
     int i;
     for (i = 0; i < list->length; ++i) {
-        printf(" \e[1m%d\e[0m %s", i + 1, list->tasks[i]);
+        printf(format, i + 1, list->tasks[i]);
     }
     // Print empty line for visual separation between lists
     printf("\n");
