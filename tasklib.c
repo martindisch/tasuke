@@ -282,6 +282,10 @@ const char *tasklib_list(char **files) {
         tasklist_print(list);
         // Cleanup
         tasklist_destroy(list);
+        // Print empty line if there is yet another list
+        if (*(files + 1)) {
+            printf("\n");
+        }
     }
 
     return NULL;

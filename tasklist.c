@@ -94,8 +94,6 @@ void tasklist_print(TaskList list) {
     for (i = 0; i < list->length; ++i) {
         printf(format, i + 1, list->tasks[i]);
     }
-    // Print empty line for visual separation between lists
-    printf("\n");
 }
 
 const char *tasklist_insert(
