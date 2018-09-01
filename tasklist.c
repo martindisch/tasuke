@@ -117,20 +117,20 @@ void tasklist_destroy(TaskList list) {
 
 void tasklist_print(TaskList list) {
     // Print list name
-    printf("\e[4m\e[1m%s\e[0m\n", list->name);
+    printf("\x1b[4m\x1b[1m%s\x1b[0m\n", list->name);
     // Determine format (for padding) depending on number of tasks
     const char *format, *pad;
     int space;
     if (list->length < 10) {
-        format = " \e[1m%d\e[0m %s";
+        format = " \x1b[1m%d\x1b[0m %s";
         pad = "   ";
         space = 80 - 3;
     } else if (list->length < 100) {
-        format = " \e[1m%2d\e[0m %s";
+        format = " \x1b[1m%2d\x1b[0m %s";
         pad = "    ";
         space = 80 - 4;
     } else {
-        format = " \e[1m%3d\e[0m %s";
+        format = " \x1b[1m%3d\x1b[0m %s";
         pad = "     ";
         space = 80 - 5;
     }
