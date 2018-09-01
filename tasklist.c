@@ -79,7 +79,7 @@ void tasklist_destroy(TaskList list) {
 
 void tasklist_print(TaskList list) {
     // Print list name
-    printf("%s:\n", list->name);
+    printf("\e[4m%s\e[0m\n", list->name);
     // Print tasks
     int i;
     for (i = 0; i < list->length; ++i) {
