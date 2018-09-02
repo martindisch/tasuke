@@ -1,4 +1,4 @@
-# tasuke [WIP]
+# tasuke
 
 <p align="center">
     <img alt="tasuke kanji" width="50%" src="kanji.svg"/>
