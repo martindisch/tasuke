@@ -118,6 +118,11 @@ void tasklist_destroy(TaskList list) {
 void tasklist_print(TaskList list) {
     // Print list name
     printf("\x1b[4m\x1b[1m%s\x1b[0m\n", list->name);
+    // If there are no tasks, show notice and return early
+    if (list->length == 0) {
+        printf(" No tasks\n");
+        return;
+    }
     // Determine format (for padding) depending on number of tasks
     const char *format, *pad;
     int space;
