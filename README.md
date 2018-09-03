@@ -39,6 +39,7 @@ If you want tasuke to keep these files somewhere else, pass this path along
 with the `-s` option.
 Since you'll most likely be assigning an alias to the tasuke executable anyway,
 you can make the alias use this argument by default.
+If you want to see a list after modification, use the `-v` flag.
 
 **List tasks**
 ```
@@ -69,15 +70,21 @@ t -m 3 5                                    # Move inside default list
 t -m -n mylist 3 5                          # Move inside specific list
 ```
 
+**Delete list(s)**
+```
+t -r                                        # Delete default task list
+t -r mylist school                          # Delete specific lists
+```
+
 **Set task list directory**
 ```
 t -a "New task" -s /path/to/dir             # Add to default list in directory
 ```
 
-**Delete list(s)**
+**Show list after modification**
 ```
-t -r                                        # Delete default task list
-t -r mylist school                          # Delete specific lists
+t -i -v 5 "Another task"                    # Insert into default list, showing
+                                            # it after the modification
 ```
 
 ## Installation
