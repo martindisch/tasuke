@@ -127,13 +127,13 @@ int main(int argc, char **argv) {
      */
     const char *error = NULL;
     if (aflg) {
-        error = tasklib_add(file, &argv[optind]);
+        error = tasklib_add(file, &argv[optind], vflg);
     } else if (iflg) {
-        error = tasklib_insert(file, &argv[optind]);
+        error = tasklib_insert(file, &argv[optind], vflg);
     } else if (dflg) {
-        error = tasklib_done(file, &argv[optind]);
+        error = tasklib_done(file, &argv[optind], vflg);
     } else if (mflg) {
-        error = tasklib_move(file, &argv[optind]);
+        error = tasklib_move(file, &argv[optind], vflg);
     } else if (rflg) {
         error = tasklib_remove(files);
     } else {

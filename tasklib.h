@@ -6,9 +6,10 @@
  *
  * @param file Full path to the file
  * @param tasks Array of tasks, terminated by a NULL element
+ * @param verbose Show list after modification (0 = false, 1 = true)
  * @return Error message or NULL on success
  */
-const char *tasklib_add(const char *file, char **tasks);
+const char *tasklib_add(const char *file, char **tasks, int verbose);
 
 /**
  * Inserts a task into a list at a specific position.
@@ -18,9 +19,11 @@ const char *tasklib_add(const char *file, char **tasks);
  * @param file Full path to file
  * @param position_task Array containing the position (1-based, string), task
  *                      text and a terminating NULL element
+ * @param verbose Show list after modification (0 = false, 1 = true)
  * @return Error message or NULL on success
  */
-const char *tasklib_insert(const char *file, char **position_task);
+const char *tasklib_insert(
+    const char *file, char **position_task, int verbose);
 
 /**
  * Deletes tasks from a list.
@@ -28,9 +31,10 @@ const char *tasklib_insert(const char *file, char **position_task);
  * @param file Full path to file
  * @param positions Array of task indices (1-based, type string), terminated
  *                  by a NULL element
+ * @param verbose Show list after modification (0 = false, 1 = true)
  * @return Error message or NULL on success
  */
-const char *tasklib_done(const char *file, char **positions);
+const char *tasklib_done(const char *file, char **positions, int verbose);
 
 /**
  * Prints task lists to stdout.
@@ -46,9 +50,10 @@ const char *tasklib_list(char **files);
  * @param file Full path to file
  * @param from_to Array containing the source and destination positions
  *                (1-based, type string), terminated by a NULL element
+ * @param verbose Show list after modification (0 = false, 1 = true)
  * @return Error message or NULL on success
  */
-const char *tasklib_move(const char *file, char **from_to);
+const char *tasklib_move(const char *file, char **from_to, int verbose);
 
 /**
  * Deletes task lists.

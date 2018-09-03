@@ -152,7 +152,7 @@ char **get_files(const char *dir, char **lists) {
  * Commands
  */
 
-const char *tasklib_add(const char *file, char **tasks) {
+const char *tasklib_add(const char *file, char **tasks, int verbose) {
     // Open file in append mode
     FILE *fp;
     if ((fp = fopen(file, "a")) == NULL) {
@@ -172,10 +172,27 @@ const char *tasklib_add(const char *file, char **tasks) {
         return "Unable to close list\n";
     }
 
+    // Show new list
+    if (verbose) {
+        // Initialize TaskList ADT
+        TaskList list = tasklist_init(file);
+        // Attempt reading the list
+        const char *error = tasklist_read(list);
+        if (error) {
+            tasklist_destroy(list);
+            return error;
+        }
+        // If there was no problem, print it
+        tasklist_print(list);
+        // Cleanup
+        tasklist_destroy(list);
+    }
+
     return NULL;
 }
 
-const char *tasklib_insert(const char *file, char **position_task) {
+const char *tasklib_insert(
+    const char *file, char **position_task, int verbose) {
     /*
      * Extract position and task argument, checking for sanity
      */
@@ -222,12 +239,20 @@ const char *tasklib_insert(const char *file, char **position_task) {
     }
     // Try writing the updated list to file
     error = tasklist_write(list);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Show the modified list
+    if (verbose) {
+        tasklist_print(list);
+    }
     tasklist_destroy(list);
 
-    return error;
+    return NULL;
 }
 
-const char *tasklib_done(const char *file, char **posargs) {
+const char *tasklib_done(const char *file, char **posargs, int verbose) {
     // Determine number of positional arguments
     int length;
     for (length = 0; posargs[length]; ++length);
@@ -262,9 +287,17 @@ const char *tasklib_done(const char *file, char **posargs) {
     }
     // Try writing the updated list to file
     error = tasklist_write(list);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Show the modified list
+    if (verbose) {
+        tasklist_print(list);
+    }
     tasklist_destroy(list);
 
-    return error;
+    return NULL;
 }
 
 const char *tasklib_list(char **files) {
@@ -291,7 +324,7 @@ const char *tasklib_list(char **files) {
     return NULL;
 }
 
-const char *tasklib_move(const char *file, char **from_to) {
+const char *tasklib_move(const char *file, char **from_to, int verbose) {
     /*
      * Extract position arguments, checking for sanity
      */
@@ -341,9 +374,17 @@ const char *tasklib_move(const char *file, char **from_to) {
     }
     // Try writing the updated list to file
     error = tasklist_write(list);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Show the modified list
+    if (verbose) {
+        tasklist_print(list);
+    }
     tasklist_destroy(list);
 
-    return error;
+    return NULL;
 }
 
 const char *tasklib_remove(char **files) {
