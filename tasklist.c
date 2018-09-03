@@ -101,10 +101,7 @@ void tasklist_destroy(TaskList list) {
     // Free content of tasks array
     int i;
     for (i = 0; i < list->length; ++i) {
-        // Only free if it wasn't already (i.e. task was removed)
-        if (list->tasks[i]) {
-            free(list->tasks[i]);
-        }
+        free(list->tasks[i]);
     }
     // Free tasks array
     free(list->tasks);
@@ -210,6 +207,10 @@ const char *tasklist_insert(
 }
 
 const char *tasklist_done(TaskList list, const long *positions) {
+    /*
+     * Delete selected tasks
+     */
+    int done_count = 0;
     // Iterate over given positions
     for ( ; *positions != -1; ++positions) {
         // Handle position out of range
@@ -221,7 +222,35 @@ const char *tasklist_done(TaskList list, const long *positions) {
         // Remove task from list
         free(list->tasks[index]);
         list->tasks[index] = NULL;
+        // Remember we deleted a task
+        ++done_count;
     }
+
+    /*
+     * Build new task list with the remaining ones
+     */
+    int new_length = list->length - done_count;
+    // If no tasks remain, just update the count and terminate
+    if (new_length == 0) {
+        list->length = 0;
+        return NULL;
+    }
+    // Allocate memory for the new task list
+    char **tasks = malloc(new_length * sizeof(char *));
+    // Iterate over the old list, copying over the surviving elements
+    int i, y;
+    for (i = 0, y = 0; i < list->length; ++i) {
+        if (list->tasks[i]) {
+            tasks[y++] = list->tasks[i];
+        }
+    }
+    // Free the old list of task references
+    free(list->tasks);
+    // Use the new list of references instead
+    list->tasks = tasks;
+    // Update the count
+    list->length = new_length;
+    list->array_size = new_length;
 
     return NULL;
 }
@@ -305,13 +334,10 @@ const char *tasklist_write(TaskList list) {
     // Write all tasks to file
     int i;
     for (i = 0; i < list->length; ++i) {
-        // Check if task exists
-        if (list->tasks[i]) {
-            // Attempt write
-            if (fputs(list->tasks[i], fp) == EOF) {
-                fclose(fp);
-                return "Unable to write to list\n";
-            }
+        // Attempt write
+        if (fputs(list->tasks[i], fp) == EOF) {
+            fclose(fp);
+            return "Unable to write to list\n";
         }
     }
 
