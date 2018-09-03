@@ -28,9 +28,8 @@ static const char *usage =
 
 int main(int argc, char **argv) {
     /*
-     * Flags & option argument variables for user input
+     * Some flags & option argument variables for user input
      */
-    // Flags that need to be checked for sanity (mutual exclusiveness, etc.)
     int aflg = 0, iflg = 0, dflg = 0, mflg = 0, rflg = 0, nflg = 0, vflg = 0;
     // Set to 1 if there is a problem parsing options
     int errflg = 0;
@@ -94,11 +93,7 @@ int main(int argc, char **argv) {
         // -r doesn't have -n option
         nflg + rflg > 1 ||
         // -n can't occur on its own
-        nflg > aflg + iflg + dflg + mflg ||
-        // -v doesn't make sense with -r
-        vflg + rflg > 1 ||
-        // -v can't occur on its own
-        vflg > aflg + iflg + dflg + mflg
+        nflg > aflg + iflg + dflg + mflg
     ) {
         fprintf(stderr, usage, argv[0]);
         exit(EXIT_FAILURE);
