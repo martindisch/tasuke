@@ -5,10 +5,10 @@
 
 static const char *usage =
     "Usage: %1$s [-s directory] [LIST]...\n"
-    "  or   %1$s -a [-n list] [-s directory] TASK...\n"
-    "  or   %1$s -i [-n list] [-s directory] POSITION TASK\n"
-    "  or   %1$s -d [-n list] [-s directory] POSITION...\n"
-    "  or   %1$s -m [-n list] [-s directory] PREV_POS NEW_POS\n"
+    "  or   %1$s -a [-n list] [-s directory] [-v] TASK...\n"
+    "  or   %1$s -i [-n list] [-s directory] [-v] POSITION TASK\n"
+    "  or   %1$s -d [-n list] [-s directory] [-v] POSITION...\n"
+    "  or   %1$s -m [-n list] [-s directory] [-v] PREV_POS NEW_POS\n"
     "  or   %1$s -r [-s directory] [LIST]...\n"
     "Manage your todo/task lists with this small utility.\n"
     "\n"
@@ -21,6 +21,7 @@ static const char *usage =
     "  -n list       Select a specific list for your current operation\n"
     "  -r            Remove task lists\n"
     "  -s directory  Select a specific directory to store task lists\n"
+    "  -v            Show the list after modification\n"
     "\n"
     "Copyright (c) 2018 Martin Disch <martindisch@gmail.com>\n"
     "Project website <https://github.com/martindisch/tasuke>\n";
