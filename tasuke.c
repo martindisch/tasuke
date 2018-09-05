@@ -32,7 +32,8 @@ int main(int argc, char **argv) {
     /*
      * Some flags & option argument variables for user input
      */
-    int aflg = 0, iflg = 0, dflg = 0, mflg = 0, rflg = 0, nflg = 0, vflg = 0;
+    int aflg = 0, iflg = 0, dflg = 0, mflg = 0, rflg = 0;
+    int lflg = 0, vflg = 0, nflg = 0;
     // Set to 1 if there is a problem parsing options
     int errflg = 0;
     // Pointers to option arguments
@@ -43,7 +44,7 @@ int main(int argc, char **argv) {
      * Would be simpler with argp, but we need to use getopt for portability.
      */
     int c;
-    while ((c = getopt(argc, argv, "aidmrhvn:s:")) != -1) {
+    while ((c = getopt(argc, argv, "aidmrlhvn:s:")) != -1) {
         switch (c) {
             case 'a':
                 aflg = 1;
@@ -59,6 +60,9 @@ int main(int argc, char **argv) {
                 break;
             case 'r':
                 rflg = 1;
+                break;
+            case 'l':
+                lflg = 1;
                 break;
             case 'h':
                 printf(usage, argv[0]);
@@ -91,9 +95,11 @@ int main(int argc, char **argv) {
         // Problem noticed by getopt
         errflg ||
         // Mutually exclusive flags
-        aflg + iflg + dflg + mflg + rflg > 1 ||
+        aflg + iflg + dflg + mflg + rflg + lflg > 1 ||
         // -r doesn't have -n option
         nflg + rflg > 1 ||
+        // -l doesn't have -n option
+        lflg + rflg > 1 ||
         // -n can't occur on its own
         nflg > aflg + iflg + dflg + mflg
     ) {
