@@ -117,6 +117,12 @@ int main(int argc, char **argv) {
             fprintf(stderr, "Unable to access directory\n");
             exit(EXIT_FAILURE);
         }
+    } else if (lflg) {
+        // The -l command needs the path to the directory, not to a list
+        if ((file = get_dir(svalue)) == NULL) {
+            fprintf(stderr, "Unable to access directory\n");
+            exit(EXIT_FAILURE);
+        }
     } else {
         // The other commands (list list(s), remove list(s)) may need several
         if ((files = get_files(svalue, &argv[optind])) == NULL) {
@@ -139,6 +145,8 @@ int main(int argc, char **argv) {
         error = tasklib_move(file, &argv[optind], vflg);
     } else if (rflg) {
         error = tasklib_remove(files);
+    } else if (lflg) {
+        error = tasklib_names(file);
     } else {
         // No command flag (= list command)
         error = tasklib_list(files);

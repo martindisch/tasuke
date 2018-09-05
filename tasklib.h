@@ -37,6 +37,14 @@ const char *tasklib_insert(
 const char *tasklib_done(const char *file, char **positions, int verbose);
 
 /**
+ * Prints the names of all task lists in the directory.
+ *
+ * @param dir Full path to directory
+ * @return Error message or NULL on success
+ */
+const char *tasklib_names(const char *dir);
+
+/**
  * Prints task lists to stdout.
  *
  * @param files Array of file paths, terminated by a NULL element

@@ -5,6 +5,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <errno.h>
+#include <dirent.h>
 #include "tasklib.h"
 #include "tasklist.h"
 
@@ -310,6 +311,23 @@ const char *tasklib_done(const char *file, char **posargs, int verbose) {
         tasklist_print(list);
     }
     tasklist_destroy(list);
+
+    return NULL;
+}
+
+const char *tasklib_names(const char *dir) {
+    DIR *dp;
+    struct dirent *ep;
+    // Attempt opening the directory stream
+    if ((dp = opendir(dir)) == NULL) {
+        return "Unable to open directory\n";
+    }
+    // Read dir entries
+    while ((ep = readdir (dp))) {
+        printf("%s\n", ep->d_name);
+    }
+    // Cleanup
+    closedir(dp);
 
     return NULL;
 }
