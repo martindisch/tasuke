@@ -49,9 +49,9 @@ static long strtopos(const char *posarg) {
  * Public helper functions
  */
 
-char *get_file(const char *dir, const char *list) {
+char *get_dir(const char *dir) {
     /*
-     * Use default values if dir or list have not been set
+     * Use default value if dir has not been set
      */
     // Pointer where we will build our copy of dir
     char *dir_cpy;
@@ -71,10 +71,6 @@ char *get_file(const char *dir, const char *list) {
         // Since the user supplied a directory, make a plain copy of this
         dir_cpy = strdup(dir);
     }
-    // If no list name was set, use the default
-    if (!list) {
-        list = "todo";
-    }
 
     /*
      * Check if the directory still exists and try to create it if not
@@ -90,6 +86,24 @@ char *get_file(const char *dir, const char *list) {
         }
     }
 
+    return dir_cpy;
+}
+
+char *get_file(const char *dir, const char *list) {
+    /*
+     * Use default values if dir or list have not been set
+     */
+    // Get the directory and create it if it doesn't exist yet
+    char *dir_cpy = get_dir(dir);
+    // Abort on error
+    if (dir_cpy == NULL) {
+        return NULL;
+    }
+    // If no list name was set, use the default
+    if (!list) {
+        list = "todo";
+    }
+
     /*
      * Build full path to file
      */
@@ -101,7 +115,7 @@ char *get_file(const char *dir, const char *list) {
     // Build the full path
     sprintf(file, path_format, dir_cpy, list);
 
-    // Free the string copy we made earlier
+    // Free the dir string we no longer need
     free(dir_cpy);
 
     return file;

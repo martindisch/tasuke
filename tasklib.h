@@ -64,6 +64,22 @@ const char *tasklib_move(const char *file, char **from_to, int verbose);
 const char *tasklib_remove(char **files);
 
 /**
+ * Builds a full path to the directory where lists are stored.
+ *
+ * If the directory is NULL, the default will be used, which is .tasuke
+ * inside the user home.
+ * If the directory does not yet exist, it will be created. This works only for
+ * one directory, it won't recreate a full path that doesn't exist.
+ * Because this returns a string of previously unknown length, it needs to
+ * dynamically allocate memory for it. The user is responsible for freeing.
+ * If there is an error accessing or creating the directory, NULL is returned.
+ *
+ * @param dir Path to directory where task lists are stored (NULL for default)
+ * @return Full path to task list directory (freed by user) or NULL on error
+ */
+char *get_dir(const char *dir);
+
+/**
  * Builds a full path to the task list file based on directory and list name.
  *
  * If the directory is NULL, the default will be used, which is .tasuke
