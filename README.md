@@ -76,6 +76,11 @@ t -r                                        # Delete default task list
 t -r mylist school                          # Delete specific lists
 ```
 
+**Show lists**
+```
+t -l                                        # Show all list names
+```
+
 **Set task list directory**
 ```
 t -a "New task" -s /path/to/dir             # Add to default list in directory
