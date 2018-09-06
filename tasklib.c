@@ -66,6 +66,22 @@ static char *filename_to_name(const char *filename) {
     return name;
 }
 
+/**
+ * Compares two strings, ignoring case.
+ *
+ * This is a comparison function to be passed into qsort().
+ *
+ * @param s1 The first string
+ * @param s2 The second string
+ * @return Integer greater than, equal to or less than 0 depending on how
+ *         s1 compares to s2.
+ */
+static int cmpstringp(const void *s1, const void *s2) {
+    // Cast & dereference to turn pointer to pointer to char
+    // into pointer to char
+    return strcasecmp(* (char * const *) s1, * (char * const *) s2);
+}
+
 /*
  * Public helper functions
  */
@@ -338,20 +354,43 @@ const char *tasklib_done(const char *file, char **posargs, int verbose) {
 const char *tasklib_names(const char *dir) {
     DIR *dp;
     struct dirent *ep;
+
     // Attempt opening the directory stream
     if ((dp = opendir(dir)) == NULL) {
         return "Unable to open directory\n";
     }
-    // Read dir entries
+
+    // Read dir entries into array
+    char **names = malloc(8 * sizeof(char *));
+    int size = 8;
+    int i = 0;
     while ((ep = readdir (dp))) {
         if (strcmp(ep->d_name, ".") != 0 && strcmp(ep->d_name, "..") != 0) {
-            char *name = filename_to_name(ep->d_name);
-            printf("%s\n", name);
-            free(name);
+            // Increase array size if necessary
+            if (i == size) {
+                names = realloc(names, 2 * size * sizeof(char *));
+                size *= 2;
+            }
+            // Insert name into array
+            names[i++] = filename_to_name(ep->d_name);
         }
     }
+
+    // Sort array alphabetically
+    qsort(names, i, sizeof(char *), cmpstringp);
+
+    // Print list names
+    int y;
+    for (y = 0; y < i; ++y) {
+        printf("%s\n", names[y]);
+    }
+
     // Cleanup
     closedir(dp);
+    for (i -= 1; i >= 0; --i) {
+        free(names[i]);
+    }
+    free(names);
 
     return NULL;
 }
