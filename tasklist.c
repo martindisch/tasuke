@@ -24,18 +24,10 @@ struct tasklist {
  * @return The list name (freed by user)
  */
 static char *path_to_name(const char *path) {
-    // Pointers to name start (inclusive) and end (exclusive)
-    const char *name_start = NULL, *name_end = NULL;
-    // Iterate over the path
-    for ( ; *path; ++path) {
-        if (*path == '/') {
-            // Update the name's start when a slash is encountered
-            name_start = path + 1;
-        } else if (*path == '.') {
-            // Update the name's end when a dot is encountered
-            name_end = path;
-        }
-    }
+    // Find the first character of the name (inclusive)
+    const char *name_start = strrchr(path, '/') + 1;
+    // Continue and find the end of the name (exclusive)
+    const char *name_end = strrchr(name_start, '.');
     // Get number of characters in the name
     int length = name_end - name_start;
     // Get a copy of the substring containing the list name
