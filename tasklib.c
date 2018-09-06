@@ -46,6 +46,26 @@ static long strtopos(const char *posarg) {
     return position;
 }
 
+/**
+ * Returns the name of a task list based on its filename.
+ *
+ * It works by simply returning a copy without the extension.
+ * Because a new string needs to be allocated, the user must free it.
+ *
+ * @param path The list's filename
+ * @return The list name (freed by user)
+ */
+static char *filename_to_name(const char *filename) {
+    // Find the last dot
+    const char *name_end = strrchr(filename, '.');
+    // Get number of characters in the name
+    int length = name_end - filename;
+    // Get a copy of the substring containing the list name
+    char *name = strndup(filename, length);
+
+    return name;
+}
+
 /*
  * Public helper functions
  */
@@ -325,7 +345,9 @@ const char *tasklib_names(const char *dir) {
     // Read dir entries
     while ((ep = readdir (dp))) {
         if (strcmp(ep->d_name, ".") != 0 && strcmp(ep->d_name, "..") != 0) {
-            printf("%s\n", ep->d_name);
+            char *name = filename_to_name(ep->d_name);
+            printf("%s\n", name);
+            free(name);
         }
     }
     // Cleanup
