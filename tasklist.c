@@ -23,7 +23,7 @@ struct tasklist {
  * @param path The full path to the file
  * @return The list name (freed by user)
  */
-static char *get_name(const char *path) {
+static char *path_to_name(const char *path) {
     // Pointers to name start (inclusive) and end (exclusive)
     const char *name_start = NULL, *name_end = NULL;
     // Iterate over the path
@@ -89,7 +89,7 @@ TaskList tasklist_init(const char *path) {
 
     // Initialize members
     list->path = strdup(path);
-    list->name = get_name(list->path);
+    list->name = path_to_name(list->path);
     list->tasks = malloc(STARTING_CAPACITY * sizeof(char *));
     list->array_size = STARTING_CAPACITY;
     list->length = 0;
