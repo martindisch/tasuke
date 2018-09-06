@@ -324,7 +324,9 @@ const char *tasklib_names(const char *dir) {
     }
     // Read dir entries
     while ((ep = readdir (dp))) {
-        printf("%s\n", ep->d_name);
+        if (strcmp(ep->d_name, ".") != 0 && strcmp(ep->d_name, "..") != 0) {
+            printf("%s\n", ep->d_name);
+        }
     }
     // Cleanup
     closedir(dp);
