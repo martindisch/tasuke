@@ -3,7 +3,7 @@
 #include <getopt.h>
 #include "tasklib.h"
 
-static const char *usage =
+static const char *usage1 =
     "Usage: %1$s [-s directory] [LIST]...\n"
     "  or   %1$s -a [-n list] [-s directory] [-v] TASK...\n"
     "  or   %1$s -i [-n list] [-s directory] [-v] POSITION TASK\n"
@@ -12,7 +12,8 @@ static const char *usage =
     "  or   %1$s -l [-s directory]\n"
     "  or   %1$s -r [-s directory] [LIST]...\n"
     "Manage your todo/task lists with this small utility.\n"
-    "\n"
+    "\n";
+static const char *usage2 =
     "Options:\n"
     "  -a            Add tasks by appending them to a list\n"
     "  -d            Complete tasks and delete them\n"
@@ -20,13 +21,27 @@ static const char *usage =
     "  -i            Insert a task into a list at a specific position\n"
     "  -l            Show all list names\n"
     "  -m            Move a task inside a list from one position to another\n"
-    "  -n list       Select a specific list for your current operation\n"
+    "  -n list       Select a specific list for your current operation\n";
+static const char *usage3 =
     "  -r            Remove task lists\n"
     "  -s directory  Select a specific directory to store task lists\n"
     "  -v            Show the list after modification\n"
     "\n"
     "Copyright (c) 2018 Martin Disch <martindisch@gmail.com>\n"
     "Project website <https://github.com/martindisch/tasuke>\n";
+
+/**
+ * Prints the usage.
+ *
+ * @param program The program name to use
+ * @param error Whether to print to stderr (1 = true, 0 = false)
+ */
+static void usage(const char *program, int error) {
+    FILE *stream = error ? stderr : stdout;
+    fprintf(stream, usage1, program);
+    fprintf(stream, usage2, program);
+    fprintf(stream, usage3, program);
+}
 
 int main(int argc, char **argv) {
     /*
@@ -65,7 +80,7 @@ int main(int argc, char **argv) {
                 lflg = 1;
                 break;
             case 'h':
-                printf(usage, argv[0]);
+                usage(argv[0], 0);
                 exit(EXIT_SUCCESS);
             case 'v':
                 vflg = 1;
@@ -103,7 +118,7 @@ int main(int argc, char **argv) {
         /* -n can't occur on its own */
         nflg > aflg + iflg + dflg + mflg
     ) {
-        fprintf(stderr, usage, argv[0]);
+        usage(argv[0], 1);
         exit(EXIT_FAILURE);
     }
 
