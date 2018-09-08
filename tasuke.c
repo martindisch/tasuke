@@ -38,12 +38,17 @@ static const char *usage3 =
  */
 static void usage(const char *program, int error) {
     FILE *stream = error ? stderr : stdout;
+
     fprintf(stream, usage1, program);
     fprintf(stream, usage2, program);
     fprintf(stream, usage3, program);
 }
 
 int main(int argc, char **argv) {
+    char *file = NULL, **files = NULL;
+    const char *error = NULL;
+    int c;
+
     /*
      * Some flags & option argument variables for user input
      */
@@ -58,7 +63,6 @@ int main(int argc, char **argv) {
      * Simple argument parsing, mostly just setting flags.
      * Would be simpler with argp, but we need to use getopt for portability.
      */
-    int c;
     while ((c = getopt(argc, argv, "aidmrlhvn:s:")) != -1) {
         switch (c) {
             case 'a':
@@ -125,7 +129,6 @@ int main(int argc, char **argv) {
     /*
      * Get the filename(s) the commands will need
      */
-    char *file = NULL, **files = NULL;
     if (aflg + iflg + dflg + mflg) {
         /* These commands use only a single task list */
         if ((file = get_file(svalue, nvalue)) == NULL) {
@@ -149,7 +152,6 @@ int main(int argc, char **argv) {
     /*
      * Handle command
      */
-    const char *error = NULL;
     if (aflg) {
         error = tasklib_add(file, &argv[optind], vflg);
     } else if (iflg) {
@@ -174,8 +176,8 @@ int main(int argc, char **argv) {
         free(file);
     }
     if (files) {
-        /* Free all paths in files array */
         int i;
+        /* Free all paths in files array */
         for (i = 0; files[i]; ++i) {
             free(files[i]);
         }

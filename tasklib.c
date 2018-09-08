@@ -33,11 +33,13 @@ static int has_trailing_slash(const char *path) {
 * @return The position as a long or -1 on error
 */
 static long strtopos(const char *posarg) {
-    /* Reset errno to use it for strtol error checking */
-    errno = 0;
+    long position;
     /* Will point to first character that is not a digit */
     char *endptr;
-    long position = strtol(posarg, &endptr, 10);
+
+    /* Reset errno to use it for strtol error checking */
+    errno = 0;
+    position = strtol(posarg, &endptr, 10);
     /* Handle conversion error */
     if (errno || *endptr != '\0') {
         return -1;
@@ -87,19 +89,21 @@ static int cmpstringp(const void *s1, const void *s2) {
  */
 
 char *get_dir(const char *dir) {
+    struct stat buffer;
+    /* Pointer where we will build our copy of dir */
+    char *dir_cpy;
+
     /*
      * Use default value if dir has not been set
      */
-    /* Pointer where we will build our copy of dir */
-    char *dir_cpy;
     /* Find the user home by checking $HOME and falling back to getpwuid */
     if (!dir) {
+        const char *dir_format;
         if ((dir = getenv("HOME")) == NULL) {
             dir = getpwuid(getuid())->pw_dir;
         }
         /* Prepare format to append the .tasuke directory to the path */
-        const char *dir_format =
-            has_trailing_slash(dir) ? "%s.tasuke" : "%s/.tasuke";
+        dir_format = has_trailing_slash(dir) ? "%s.tasuke" : "%s/.tasuke";
         /* Allocate memory to copy in dir & the default .tasuke */
         dir_cpy = malloc((strlen(dir) + 9) * sizeof(char));
         /* Build the new directory path */
@@ -112,7 +116,6 @@ char *get_dir(const char *dir) {
     /*
      * Check if the directory still exists and try to create it if not
      */
-    struct stat buffer;
     /* Does directory exist? */
     if (stat(dir_cpy, &buffer) == -1 || S_ISDIR(buffer.st_mode) == 0) {
         /* If not, create it */
@@ -127,6 +130,9 @@ char *get_dir(const char *dir) {
 }
 
 char *get_file(const char *dir, const char *list) {
+    char *file;
+    const char *path_format;
+
     /*
      * Use default values if dir or list have not been set
      */
@@ -145,10 +151,9 @@ char *get_file(const char *dir, const char *list) {
      * Build full path to file
      */
     /* Allocate memory for full path (freed by user) */
-    char *file = malloc((strlen(dir_cpy) + strlen(list) + 6) * sizeof(char));
+    file = malloc((strlen(dir_cpy) + strlen(list) + 6) * sizeof(char));
     /* Choose format based on whether there is a trailing slash already */
-    const char *path_format =
-        has_trailing_slash(dir_cpy) ? "%s%s.txt" : "%s/%s.txt";
+    path_format = has_trailing_slash(dir_cpy) ? "%s%s.txt" : "%s/%s.txt";
     /* Build the full path */
     sprintf(file, path_format, dir_cpy, list);
 
@@ -159,12 +164,12 @@ char *get_file(const char *dir, const char *list) {
 }
 
 char **get_files(const char *dir, char **lists) {
-    /* Get number of lists by iterating over array until NULL terminator */
-    int i;
-    for (i = 0; lists[i]; ++i);
-
-    /* Build path array */
     char **files;
+    int i;
+
+    /* Get number of lists by iterating over array until NULL terminator */
+    for (i = 0; lists[i]; ++i);
+    /* Build path array */
     if (i == 0) {
         /* No lists given, allocate memory for default list + terminator */
         files = malloc(2 * sizeof(char *));
@@ -177,10 +182,10 @@ char **get_files(const char *dir, char **lists) {
         /* Add terminator */
         files[1] = NULL;
     } else {
+        int y;
         /* Some lists were given, allocate memory for them + terminator */
         files = malloc((i + 1) * sizeof(char *));
         /* Iterate over lists, building paths */
-        int y;
         for (y = 0; y < i; ++y) {
             if ((files[y] = get_file(dir, lists[y])) == NULL) {
                 /* Free paths we've already acquired at this point */
@@ -204,8 +209,9 @@ char **get_files(const char *dir, char **lists) {
  */
 
 const char *tasklib_add(const char *file, char **tasks, int verbose) {
-    /* Open file in append mode */
     FILE *fp;
+
+    /* Open file in append mode */
     if ((fp = fopen(file, "a")) == NULL) {
         return "Unable to open list\n";
     }
@@ -244,12 +250,15 @@ const char *tasklib_add(const char *file, char **tasks, int verbose) {
 
 const char *tasklib_insert(
     const char *file, char **position_task, int verbose) {
+    int i;
+    long position = -1;
+    const char *task = NULL;
+    TaskList list;
+    const char *error;
+
     /*
      * Extract position and task argument, checking for sanity
      */
-    long position = -1;
-    const char *task = NULL;
-    int i;
     for (i = 0; *position_task; ++position_task, ++i) {
         if (i == 0) {
             /* Extract position */
@@ -275,9 +284,9 @@ const char *tasklib_insert(
      * Use TaskList to handle the insertion
      */
     /* Build TaskList ADT */
-    TaskList list = tasklist_init(file);
+    list = tasklist_init(file);
     /* Try reading the list */
-    const char *error = tasklist_read(list);
+    error = tasklist_read(list);
     if (error) {
         tasklist_destroy(list);
         return error;
@@ -304,15 +313,19 @@ const char *tasklib_insert(
 }
 
 const char *tasklib_done(const char *file, char **posargs, int verbose) {
-    /* Determine number of positional arguments */
     int length;
+    long *positions;
+    int i;
+    TaskList list;
+    const char *error;
+
+    /* Determine number of positional arguments */
     for (length = 0; posargs[length]; ++length);
     /* Create array to store converted positions */
-    long positions[length + 1];
+    positions = malloc((length + 1) * sizeof(long));
     /* Set terminator element */
     positions[length] = -1;
     /* Iterate over all positional arguments, building array of positions */
-    int i;
     for (i = 0; i < length; ++i) {
         long position = strtopos(posargs[i]);
         /* Handle conversion error */
@@ -323,9 +336,9 @@ const char *tasklib_done(const char *file, char **posargs, int verbose) {
     }
 
     /* Build TaskList ADT */
-    TaskList list = tasklist_init(file);
+    list = tasklist_init(file);
     /* Try reading the list */
-    const char *error = tasklist_read(list);
+    error = tasklist_read(list);
     if (error) {
         tasklist_destroy(list);
         return error;
@@ -347,6 +360,7 @@ const char *tasklib_done(const char *file, char **posargs, int verbose) {
         tasklist_print(list);
     }
     tasklist_destroy(list);
+    free(positions);
 
     return NULL;
 }
@@ -354,6 +368,9 @@ const char *tasklib_done(const char *file, char **posargs, int verbose) {
 const char *tasklib_names(const char *dir) {
     DIR *dp;
     struct dirent *ep;
+    char **names = malloc(8 * sizeof(char *));
+    int size = 8;
+    int i = 0, y;
 
     /* Attempt opening the directory stream */
     if ((dp = opendir(dir)) == NULL) {
@@ -361,9 +378,6 @@ const char *tasklib_names(const char *dir) {
     }
 
     /* Read dir entries into array */
-    char **names = malloc(8 * sizeof(char *));
-    int size = 8;
-    int i = 0;
     while ((ep = readdir (dp))) {
         if (strcmp(ep->d_name, ".") != 0 && strcmp(ep->d_name, "..") != 0) {
             /* Increase array size if necessary */
@@ -380,7 +394,6 @@ const char *tasklib_names(const char *dir) {
     qsort(names, i, sizeof(char *), cmpstringp);
 
     /* Print list names */
-    int y;
     for (y = 0; y < i; ++y) {
         printf("%s\n", names[y]);
     }
@@ -420,11 +433,14 @@ const char *tasklib_list(char **files) {
 }
 
 const char *tasklib_move(const char *file, char **from_to, int verbose) {
+    int i;
+    long from_pos = -1, to_pos = -1;
+    TaskList list;
+    const char *error;
+
     /*
      * Extract position arguments, checking for sanity
      */
-    long from_pos = -1, to_pos = -1;
-    int i;
     for (i = 0; *from_to; ++from_to, ++i) {
         if (i == 0) {
             /* Extract from position */
@@ -454,9 +470,9 @@ const char *tasklib_move(const char *file, char **from_to, int verbose) {
      * Use TaskList to handle the insertion
      */
     /* Build TaskList ADT */
-    TaskList list = tasklist_init(file);
+    list = tasklist_init(file);
     /* Try reading the list */
-    const char *error = tasklist_read(list);
+    error = tasklist_read(list);
     if (error) {
         tasklist_destroy(list);
         return error;
