@@ -3,6 +3,13 @@
 #include <string.h>
 #include "tasklist.h"
 
+/*
+ * POSIX methods
+ */
+
+extern char *strdup(const char *);
+extern char *strndup(const char *, size_t);
+
 #define TASKLIST_STARTING_CAPACITY 16
 #define TASKLIST_LINE_MAX 2048
 

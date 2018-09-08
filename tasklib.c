@@ -3,11 +3,20 @@
 #include <pwd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <sys/stat.h>
 #include <errno.h>
 #include <dirent.h>
 #include "tasklib.h"
 #include "tasklist.h"
+
+/*
+ * POSIX methods
+ */
+
+extern char *strdup(const char *);
+extern char *strndup(const char *, size_t);
+extern int strcasecmp(const char *, const char *);
 
 /*
  * Private helper functions
