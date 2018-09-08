@@ -34,9 +34,9 @@ int main(int argc, char **argv) {
      */
     int aflg = 0, iflg = 0, dflg = 0, mflg = 0, rflg = 0;
     int lflg = 0, vflg = 0, nflg = 0;
-    // Set to 1 if there is a problem parsing options
+    /* Set to 1 if there is a problem parsing options */
     int errflg = 0;
-    // Pointers to option arguments
+    /* Pointers to option arguments */
     const char *nvalue = NULL, *svalue = NULL;
 
     /*
@@ -78,11 +78,11 @@ int main(int argc, char **argv) {
                 svalue = optarg;
                 break;
             case ':':
-                // Option flag without required option argument
+                /* Option flag without required option argument */
                 errflg = 1;
                 break;
             case '?':
-                // Unrecognized option
+                /* Unrecognized option */
                 errflg = 1;
                 break;
         }
@@ -92,15 +92,15 @@ int main(int argc, char **argv) {
      * Several checks for parsing problems and bad usage of flags
      */
     if (
-        // Problem noticed by getopt
+        /* Problem noticed by getopt */
         errflg ||
-        // Mutually exclusive flags
+        /* Mutually exclusive flags */
         aflg + iflg + dflg + mflg + rflg + lflg > 1 ||
-        // -r doesn't have -n option
+        /* -r doesn't have -n option */
         nflg + rflg > 1 ||
-        // -l doesn't have -n option
+        /* -l doesn't have -n option */
         lflg + rflg > 1 ||
-        // -n can't occur on its own
+        /* -n can't occur on its own */
         nflg > aflg + iflg + dflg + mflg
     ) {
         fprintf(stderr, usage, argv[0]);
@@ -112,19 +112,19 @@ int main(int argc, char **argv) {
      */
     char *file = NULL, **files = NULL;
     if (aflg + iflg + dflg + mflg) {
-        // These commands use only a single task list
+        /* These commands use only a single task list */
         if ((file = get_file(svalue, nvalue)) == NULL) {
             fprintf(stderr, "Unable to access directory\n");
             exit(EXIT_FAILURE);
         }
     } else if (lflg) {
-        // The -l command needs the path to the directory, not to a list
+        /* The -l command needs the path to the directory, not to a list */
         if ((file = get_dir(svalue)) == NULL) {
             fprintf(stderr, "Unable to access directory\n");
             exit(EXIT_FAILURE);
         }
     } else {
-        // The other commands (list list(s), remove list(s)) may need several
+        /* The other commands (list, remove) may need several */
         if ((files = get_files(svalue, &argv[optind])) == NULL) {
             fprintf(stderr, "Unable to access directory\n");
             exit(EXIT_FAILURE);
@@ -148,7 +148,7 @@ int main(int argc, char **argv) {
     } else if (lflg) {
         error = tasklib_names(file);
     } else {
-        // No command flag (= list command)
+        /* No command flag (= list command) */
         error = tasklib_list(files);
     }
 
@@ -159,12 +159,12 @@ int main(int argc, char **argv) {
         free(file);
     }
     if (files) {
-        // Free all paths in files array
+        /* Free all paths in files array */
         int i;
         for (i = 0; files[i]; ++i) {
             free(files[i]);
         }
-        // Free the array itself
+        /* Free the array itself */
         free(files);
     }
 

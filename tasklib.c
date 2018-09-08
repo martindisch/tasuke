@@ -20,9 +20,9 @@
   * @return 0 if there is no trailing slash
   */
 static int has_trailing_slash(const char *path) {
-    // Iterate over string until we find the end
+    /* Iterate over string until we find the end */
     while (*path != '\0') ++path;
-    // Compare last character (before terminator) with slash
+    /* Compare last character (before terminator) with slash */
     return *(path - 1) == '/';
 }
 
@@ -33,12 +33,12 @@ static int has_trailing_slash(const char *path) {
 * @return The position as a long or -1 on error
 */
 static long strtopos(const char *posarg) {
-    // Reset errno to use it for strtol error checking
+    /* Reset errno to use it for strtol error checking */
     errno = 0;
-    // Will point to first character that is not a digit
+    /* Will point to first character that is not a digit */
     char *endptr;
     long position = strtol(posarg, &endptr, 10);
-    // Handle conversion error
+    /* Handle conversion error */
     if (errno || *endptr != '\0') {
         return -1;
     }
@@ -56,11 +56,11 @@ static long strtopos(const char *posarg) {
  * @return The list name (freed by user)
  */
 static char *filename_to_name(const char *filename) {
-    // Find the last dot
+    /* Find the last dot */
     const char *name_end = strrchr(filename, '.');
-    // Get number of characters in the name
+    /* Get number of characters in the name */
     int length = name_end - filename;
-    // Get a copy of the substring containing the list name
+    /* Get a copy of the substring containing the list name */
     char *name = strndup(filename, length);
 
     return name;
@@ -77,8 +77,8 @@ static char *filename_to_name(const char *filename) {
  *         s1 compares to s2.
  */
 static int cmpstringp(const void *s1, const void *s2) {
-    // Cast & dereference to turn pointer to pointer to char
-    // into pointer to char
+    /* Cast & dereference to turn pointer to pointer to char
+       into pointer to char */
     return strcasecmp(* (char * const *) s1, * (char * const *) s2);
 }
 
@@ -90,22 +90,22 @@ char *get_dir(const char *dir) {
     /*
      * Use default value if dir has not been set
      */
-    // Pointer where we will build our copy of dir
+    /* Pointer where we will build our copy of dir */
     char *dir_cpy;
-    // Find the user home by checking $HOME and falling back to getpwuid
+    /* Find the user home by checking $HOME and falling back to getpwuid */
     if (!dir) {
         if ((dir = getenv("HOME")) == NULL) {
             dir = getpwuid(getuid())->pw_dir;
         }
-        // Prepare format to append the .tasuke directory to the path
+        /* Prepare format to append the .tasuke directory to the path */
         const char *dir_format =
             has_trailing_slash(dir) ? "%s.tasuke" : "%s/.tasuke";
-        // Allocate memory to copy in dir & the default .tasuke
+        /* Allocate memory to copy in dir & the default .tasuke */
         dir_cpy = malloc((strlen(dir) + 9) * sizeof(char));
-        // Build the new directory path
+        /* Build the new directory path */
         sprintf(dir_cpy, dir_format, dir);
     } else {
-        // Since the user supplied a directory, make a plain copy of this
+        /* Since the user supplied a directory, make a plain copy of this */
         dir_cpy = strdup(dir);
     }
 
@@ -113,11 +113,11 @@ char *get_dir(const char *dir) {
      * Check if the directory still exists and try to create it if not
      */
     struct stat buffer;
-    // Does directory exist?
+    /* Does directory exist? */
     if (stat(dir_cpy, &buffer) == -1 || S_ISDIR(buffer.st_mode) == 0) {
-        // If not, create it
+        /* If not, create it */
         if (mkdir(dir_cpy, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == -1) {
-            // There was an error, free memory and return
+            /* There was an error, free memory and return */
             free(dir_cpy);
             return NULL;
         }
@@ -130,13 +130,13 @@ char *get_file(const char *dir, const char *list) {
     /*
      * Use default values if dir or list have not been set
      */
-    // Get the directory and create it if it doesn't exist yet
+    /* Get the directory and create it if it doesn't exist yet */
     char *dir_cpy = get_dir(dir);
-    // Abort on error
+    /* Abort on error */
     if (dir_cpy == NULL) {
         return NULL;
     }
-    // If no list name was set, use the default
+    /* If no list name was set, use the default */
     if (!list) {
         list = "todo";
     }
@@ -144,55 +144,55 @@ char *get_file(const char *dir, const char *list) {
     /*
      * Build full path to file
      */
-    // Allocate memory for full path (freed by user)
+    /* Allocate memory for full path (freed by user) */
     char *file = malloc((strlen(dir_cpy) + strlen(list) + 6) * sizeof(char));
-    // Choose format based on whether there is a trailing slash already
+    /* Choose format based on whether there is a trailing slash already */
     const char *path_format =
         has_trailing_slash(dir_cpy) ? "%s%s.txt" : "%s/%s.txt";
-    // Build the full path
+    /* Build the full path */
     sprintf(file, path_format, dir_cpy, list);
 
-    // Free the dir string we no longer need
+    /* Free the dir string we no longer need */
     free(dir_cpy);
 
     return file;
 }
 
 char **get_files(const char *dir, char **lists) {
-    // Get number of lists by iterating over array until NULL terminator found
+    /* Get number of lists by iterating over array until NULL terminator */
     int i;
     for (i = 0; lists[i]; ++i);
 
-    // Build path array
+    /* Build path array */
     char **files;
     if (i == 0) {
-        // No lists given, allocate memory for default list + terminator
+        /* No lists given, allocate memory for default list + terminator */
         files = malloc(2 * sizeof(char *));
-        // Build path to default list
+        /* Build path to default list */
         if ((files[0] = get_file(dir, NULL)) == NULL) {
-            // Free the empty array
+            /* Free the empty array */
             free(files);
             return NULL;
         }
-        // Add terminator
+        /* Add terminator */
         files[1] = NULL;
     } else {
-        // Some lists were given, allocate memory for them + terminator
+        /* Some lists were given, allocate memory for them + terminator */
         files = malloc((i + 1) * sizeof(char *));
-        // Iterate over lists, building paths
+        /* Iterate over lists, building paths */
         int y;
         for (y = 0; y < i; ++y) {
             if ((files[y] = get_file(dir, lists[y])) == NULL) {
-                // Free paths we've already acquired at this point
+                /* Free paths we've already acquired at this point */
                 for (--y; y >= 0; --y) {
                     free(files[y]);
                 }
-                // Free the empty array
+                /* Free the empty array */
                 free(files);
                 return NULL;
             }
         }
-        // Add terminator
+        /* Add terminator */
         files[i] = NULL;
     }
 
@@ -204,13 +204,13 @@ char **get_files(const char *dir, char **lists) {
  */
 
 const char *tasklib_add(const char *file, char **tasks, int verbose) {
-    // Open file in append mode
+    /* Open file in append mode */
     FILE *fp;
     if ((fp = fopen(file, "a")) == NULL) {
         return "Unable to open list\n";
     }
 
-    // Write all tasks to file
+    /* Write all tasks to file */
     for ( ; *tasks; ++tasks) {
         if (fprintf(fp, "%s\n", *tasks) < 0) {
             fclose(fp);
@@ -218,24 +218,24 @@ const char *tasklib_add(const char *file, char **tasks, int verbose) {
         }
     }
 
-    // Close file
+    /* Close file */
     if (fclose(fp) == EOF) {
         return "Unable to close list\n";
     }
 
-    // Show new list
+    /* Show new list */
     if (verbose) {
-        // Initialize TaskList ADT
+        /* Initialize TaskList ADT */
         TaskList list = tasklist_init(file);
-        // Attempt reading the list
+        /* Attempt reading the list */
         const char *error = tasklist_read(list);
         if (error) {
             tasklist_destroy(list);
             return error;
         }
-        // If there was no problem, print it
+        /* If there was no problem, print it */
         tasklist_print(list);
-        // Cleanup
+        /* Cleanup */
         tasklist_destroy(list);
     }
 
@@ -252,21 +252,21 @@ const char *tasklib_insert(
     int i;
     for (i = 0; *position_task; ++position_task, ++i) {
         if (i == 0) {
-            // Extract position
+            /* Extract position */
             position = strtopos(*position_task);
-            // Handle conversion error
+            /* Handle conversion error */
             if (position == -1) {
                 return "Position not a number\n";
             }
         } else if (i == 1) {
-            // Extract task text
+            /* Extract task text */
             task = *position_task;
         } else {
-            // There is an additional invalid argument
+            /* There is an additional invalid argument */
             return "Too many arguments\n";
         }
     }
-    // Abort if we don't have all required arguments
+    /* Abort if we don't have all required arguments */
     if (position == -1 || task == NULL) {
         return "Not enough arguments\n";
     }
@@ -274,27 +274,27 @@ const char *tasklib_insert(
     /*
      * Use TaskList to handle the insertion
      */
-    // Build TaskList ADT
+    /* Build TaskList ADT */
     TaskList list = tasklist_init(file);
-    // Try reading the list
+    /* Try reading the list */
     const char *error = tasklist_read(list);
     if (error) {
         tasklist_destroy(list);
         return error;
     }
-    // Try inserting the task
+    /* Try inserting the task */
     error = tasklist_insert(list, position, task);
     if (error) {
         tasklist_destroy(list);
         return error;
     }
-    // Try writing the updated list to file
+    /* Try writing the updated list to file */
     error = tasklist_write(list);
     if (error) {
         tasklist_destroy(list);
         return error;
     }
-    // Show the modified list
+    /* Show the modified list */
     if (verbose) {
         tasklist_print(list);
     }
@@ -304,45 +304,45 @@ const char *tasklib_insert(
 }
 
 const char *tasklib_done(const char *file, char **posargs, int verbose) {
-    // Determine number of positional arguments
+    /* Determine number of positional arguments */
     int length;
     for (length = 0; posargs[length]; ++length);
-    // Create array to store converted positions
+    /* Create array to store converted positions */
     long positions[length + 1];
-    // Set terminator element
+    /* Set terminator element */
     positions[length] = -1;
-    // Iterate over all positional arguments, building array of positions
+    /* Iterate over all positional arguments, building array of positions */
     int i;
     for (i = 0; i < length; ++i) {
         long position = strtopos(posargs[i]);
-        // Handle conversion error
+        /* Handle conversion error */
         if (position == -1) {
             return "Position not a number\n";
         }
         positions[i] = position;
     }
 
-    // Build TaskList ADT
+    /* Build TaskList ADT */
     TaskList list = tasklist_init(file);
-    // Try reading the list
+    /* Try reading the list */
     const char *error = tasklist_read(list);
     if (error) {
         tasklist_destroy(list);
         return error;
     }
-    // Try deleting tasks
+    /* Try deleting tasks */
     error = tasklist_done(list, positions);
     if (error) {
         tasklist_destroy(list);
         return error;
     }
-    // Try writing the updated list to file
+    /* Try writing the updated list to file */
     error = tasklist_write(list);
     if (error) {
         tasklist_destroy(list);
         return error;
     }
-    // Show the modified list
+    /* Show the modified list */
     if (verbose) {
         tasklist_print(list);
     }
@@ -355,37 +355,37 @@ const char *tasklib_names(const char *dir) {
     DIR *dp;
     struct dirent *ep;
 
-    // Attempt opening the directory stream
+    /* Attempt opening the directory stream */
     if ((dp = opendir(dir)) == NULL) {
         return "Unable to open directory\n";
     }
 
-    // Read dir entries into array
+    /* Read dir entries into array */
     char **names = malloc(8 * sizeof(char *));
     int size = 8;
     int i = 0;
     while ((ep = readdir (dp))) {
         if (strcmp(ep->d_name, ".") != 0 && strcmp(ep->d_name, "..") != 0) {
-            // Increase array size if necessary
+            /* Increase array size if necessary */
             if (i == size) {
                 names = realloc(names, 2 * size * sizeof(char *));
                 size *= 2;
             }
-            // Insert name into array
+            /* Insert name into array */
             names[i++] = filename_to_name(ep->d_name);
         }
     }
 
-    // Sort array alphabetically
+    /* Sort array alphabetically */
     qsort(names, i, sizeof(char *), cmpstringp);
 
-    // Print list names
+    /* Print list names */
     int y;
     for (y = 0; y < i; ++y) {
         printf("%s\n", names[y]);
     }
 
-    // Cleanup
+    /* Cleanup */
     closedir(dp);
     for (i -= 1; i >= 0; --i) {
         free(names[i]);
@@ -396,21 +396,21 @@ const char *tasklib_names(const char *dir) {
 }
 
 const char *tasklib_list(char **files) {
-    // Iterate over path array until terminator is encountered
+    /* Iterate over path array until terminator is encountered */
     for ( ; *files; ++files) {
-        // Initialize TaskList ADT
+        /* Initialize TaskList ADT */
         TaskList list = tasklist_init(*files);
-        // Attempt reading current list
+        /* Attempt reading current list */
         const char *error = tasklist_read(list);
         if (error) {
             tasklist_destroy(list);
             return error;
         }
-        // If there was no problem, print it
+        /* If there was no problem, print it */
         tasklist_print(list);
-        // Cleanup
+        /* Cleanup */
         tasklist_destroy(list);
-        // Print empty line if there is yet another list
+        /* Print empty line if there is yet another list */
         if (*(files + 1)) {
             printf("\n");
         }
@@ -427,25 +427,25 @@ const char *tasklib_move(const char *file, char **from_to, int verbose) {
     int i;
     for (i = 0; *from_to; ++from_to, ++i) {
         if (i == 0) {
-            // Extract from position
+            /* Extract from position */
             from_pos = strtopos(*from_to);
-            // Handle conversion error
+            /* Handle conversion error */
             if (from_pos == -1) {
                 return "Position not a number\n";
             }
         } else if (i == 1) {
-            // Extract to position
+            /* Extract to position */
             to_pos = strtopos(*from_to);
-            // Handle conversion error
+            /* Handle conversion error */
             if (to_pos == -1) {
                 return "Position not a number\n";
             }
         } else {
-            // There is an additional invalid argument
+            /* There is an additional invalid argument */
             return "Too many arguments\n";
         }
     }
-    // Abort if we don't have all required arguments
+    /* Abort if we don't have all required arguments */
     if (from_pos == -1 || to_pos == -1) {
         return "Not enough arguments\n";
     }
@@ -453,27 +453,27 @@ const char *tasklib_move(const char *file, char **from_to, int verbose) {
     /*
      * Use TaskList to handle the insertion
      */
-    // Build TaskList ADT
+    /* Build TaskList ADT */
     TaskList list = tasklist_init(file);
-    // Try reading the list
+    /* Try reading the list */
     const char *error = tasklist_read(list);
     if (error) {
         tasklist_destroy(list);
         return error;
     }
-    // Try inserting the task
+    /* Try inserting the task */
     error = tasklist_move(list, from_pos, to_pos);
     if (error) {
         tasklist_destroy(list);
         return error;
     }
-    // Try writing the updated list to file
+    /* Try writing the updated list to file */
     error = tasklist_write(list);
     if (error) {
         tasklist_destroy(list);
         return error;
     }
-    // Show the modified list
+    /* Show the modified list */
     if (verbose) {
         tasklist_print(list);
     }
@@ -483,9 +483,9 @@ const char *tasklib_move(const char *file, char **from_to, int verbose) {
 }
 
 const char *tasklib_remove(char **files) {
-    // Iterate over path array until terminator is encountered
+    /* Iterate over path array until terminator is encountered */
     for ( ; *files; ++files) {
-        // Attempt unlinking
+        /* Attempt unlinking */
         if (unlink(*files) != 0) {
             return "Unable to delete list\n";
         }

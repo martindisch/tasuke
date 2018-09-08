@@ -72,4 +72,4 @@ const char *tasklist_read(TaskList list);
  */
 const char *tasklist_write(TaskList list);
 
-#endif // TASKLIST_H
+#endif /* TASKLIST_H */

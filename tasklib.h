@@ -127,4 +127,4 @@ char *get_file(const char *dir, const char *list);
  */
 char **get_files(const char *dir, char **lists);
 
-#endif // TASKLIB_H
+#endif /* TASKLIB_H */
