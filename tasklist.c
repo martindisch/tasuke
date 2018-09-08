@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-#include <limits.h>
 #include "tasklist.h"
 
-#define STARTING_CAPACITY 16
+#define TASKLIST_STARTING_CAPACITY 16
+#define TASKLIST_LINE_MAX 2048
 
 struct tasklist {
     char *path;
@@ -82,8 +82,8 @@ TaskList tasklist_init(const char *path) {
     /* Initialize members */
     list->path = strdup(path);
     list->name = path_to_name(list->path);
-    list->tasks = malloc(STARTING_CAPACITY * sizeof(char *));
-    list->array_size = STARTING_CAPACITY;
+    list->tasks = malloc(TASKLIST_STARTING_CAPACITY * sizeof(char *));
+    list->array_size = TASKLIST_STARTING_CAPACITY;
     list->length = 0;
 
     return list;
@@ -292,9 +292,9 @@ const char *tasklist_read(TaskList list) {
     }
 
     /* Read tasks */
-    char line[LINE_MAX];
+    char line[TASKLIST_LINE_MAX];
     int i = 0;
-    while (fgets(line, LINE_MAX, fp) != NULL) {
+    while (fgets(line, TASKLIST_LINE_MAX, fp) != NULL) {
         if (list->array_size - i == 0) {
             /* Double array size */
             list->tasks = realloc(
