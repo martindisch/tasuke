@@ -1,7 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <getopt.h>
+#include <unistd.h>
 #include "tasklib.h"
+
+/*
+ * POSIX methods
+ */
+extern int getopt(int, char **, const char *);
+extern char *optarg;
+extern int optind;
 
 static const char *usage1 =
     "Usage: %1$s [-s directory] [LIST]...\n"
