@@ -1,4 +1,4 @@
-CFLAGS = -Wall
+CFLAGS = -Wall -std=c90 -Wpedantic
 DEBUG = -g -O0
 
 .PHONY: all clean debug
