@@ -1,14 +1,10 @@
+/* Using strdup & strndup, need POSIX 2008 */
+#define _POSIX_C_SOURCE  200809L
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include "tasklist.h"
-
-/*
- * POSIX methods
- */
-
-extern char *strdup(const char *);
-extern char *strndup(const char *, size_t);
 
 #define TASKLIST_STARTING_CAPACITY 16
 #define TASKLIST_LINE_MAX 2048
