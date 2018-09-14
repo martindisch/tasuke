@@ -105,5 +105,22 @@ option to the command. For example, you could use
 alias t='/opt/tasuke/tasuke -s /home/user/Dropbox/tasuke'
 ```
 
+## Language, standards & platforms
+By default, tasuke is compiled by GCC according to strict ISO C11, with some
+POSIX functions.
+C11 is used because it was the newest standard at the time of development.
+However, tasuke doesn't use any features that are not already in C99, so it's
+possible to compile it with that as well.
+The project doesn't conform to ANSI C89/ISO C90, because there are several
+annoying restrictions (no mixing of declarations and code, short minimum
+supported string length by compiler, no variable declarations in for loop
+statements, etc.) and there are no tangible benefits of doing that for
+userspace programs.
+Some POSIX functions that are not part of standard C are used (`getopt`,
+`strcasecmp`, etc.), and feature test macros are defined at the top of source
+files to communicate the required POSIX version to the standard library.
+If your glibc is older than 2.12, you may need to use different macros, because
+some functions were not part of POSIX before that.
+
 ## License
 [MIT License](LICENSE)
