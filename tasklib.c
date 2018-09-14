@@ -184,8 +184,7 @@ char **get_files(const char *dir, char **lists) {
         // Some lists were given, allocate memory for them + terminator
         files = malloc((i + 1) * sizeof(char *));
         // Iterate over lists, building paths
-        int y;
-        for (y = 0; y < i; ++y) {
+        for (int y = 0; y < i; ++y) {
             if ((files[y] = get_file(dir, lists[y])) == NULL) {
                 // Free paths we've already acquired at this point
                 for (--y; y >= 0; --y) {
@@ -253,8 +252,7 @@ const char *tasklib_insert(
      */
     long position = -1;
     const char *task = NULL;
-    int i;
-    for (i = 0; *position_task; ++position_task, ++i) {
+    for (int i = 0; *position_task; ++position_task, ++i) {
         if (i == 0) {
             // Extract position
             position = strtopos(*position_task);
@@ -316,8 +314,7 @@ const char *tasklib_done(const char *file, char **posargs, int verbose) {
     // Set terminator element
     positions[length] = -1;
     // Iterate over all positional arguments, building array of positions
-    int i;
-    for (i = 0; i < length; ++i) {
+    for (int i = 0; i < length; ++i) {
         long position = strtopos(posargs[i]);
         // Handle conversion error
         if (position == -1) {
@@ -384,8 +381,7 @@ const char *tasklib_names(const char *dir) {
     qsort(names, i, sizeof(char *), cmpstringp);
 
     // Print list names
-    int y;
-    for (y = 0; y < i; ++y) {
+    for (int y = 0; y < i; ++y) {
         printf("%s\n", names[y]);
     }
 
@@ -428,8 +424,7 @@ const char *tasklib_move(const char *file, char **from_to, int verbose) {
      * Extract position arguments, checking for sanity
      */
     long from_pos = -1, to_pos = -1;
-    int i;
-    for (i = 0; *from_to; ++from_to, ++i) {
+    for (int i = 0; *from_to; ++from_to, ++i) {
         if (i == 0) {
             // Extract from position
             from_pos = strtopos(*from_to);

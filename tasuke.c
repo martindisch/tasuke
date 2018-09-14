@@ -163,8 +163,7 @@ int main(int argc, char **argv) {
     }
     if (files) {
         // Free all paths in files array
-        int i;
-        for (i = 0; files[i]; ++i) {
+        for (int i = 0; files[i]; ++i) {
             free(files[i]);
         }
         // Free the array itself

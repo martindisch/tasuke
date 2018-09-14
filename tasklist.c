@@ -60,8 +60,7 @@ static const char *fold(char *dest, const char *src, int n) {
     // This is the next character that should be printed
     const char *next = src + n;
     // Find the last space within n characters
-    int i;
-    for (i = 0; i <= n; ++i) {
+    for (int i = 0; i <= n; ++i) {
         if (src[i] == ' ') {
             // Set end (exclusive) to the space
             end = src + i;
@@ -94,8 +93,7 @@ TaskList tasklist_init(const char *path) {
 
 void tasklist_destroy(TaskList list) {
     // Free content of tasks array
-    int i;
-    for (i = 0; i < list->length; ++i) {
+    for (int i = 0; i < list->length; ++i) {
         free(list->tasks[i]);
     }
     // Free tasks array
@@ -132,8 +130,7 @@ void tasklist_print(TaskList list) {
         space = 80 - 5;
     }
     // Print tasks
-    int i;
-    for (i = 0; i < list->length; ++i) {
+    for (int i = 0; i < list->length; ++i) {
         if (strlen(list->tasks[i]) <= space + 1) {
             // There is enough space to print the whole task on one line
             printf(format, i + 1, list->tasks[i]);
@@ -188,8 +185,7 @@ const char *tasklist_insert(
     } else {
         // Normal case: insert somewhere and bubble other elements down
         char *current, *previous = new_task;
-        int i;
-        for (i = index; i < list->length + 1; ++i) {
+        for (int i = index; i < list->length + 1; ++i) {
             current = list->tasks[i];
             list->tasks[i] = previous;
             previous = current;
@@ -233,8 +229,7 @@ const char *tasklist_done(TaskList list, const long *positions) {
     // Allocate memory for the new task list
     char **tasks = malloc(new_length * sizeof(char *));
     // Iterate over the old list, copying over the surviving elements
-    int i, y;
-    for (i = 0, y = 0; i < list->length; ++i) {
+    for (int i = 0, y = 0; i < list->length; ++i) {
         if (list->tasks[i]) {
             tasks[y++] = list->tasks[i];
         }
@@ -269,15 +264,14 @@ const char *tasklist_move(TaskList list, long from_pos, long to_pos) {
     /*
      * Movement
      */
-    int i;
     if (from < to) {
-        for (i = from; i < to; ++i) {
+        for (int i = from; i < to; ++i) {
             char *current = list->tasks[i];
             list->tasks[i] = list->tasks[i + 1];
             list->tasks[i + 1] = current;
         }
     } else {
-        for (i = from; i > to; --i) {
+        for (int i = from; i > to; --i) {
             char *current = list->tasks[i];
             list->tasks[i] = list->tasks[i - 1];
             list->tasks[i - 1] = current;
@@ -327,8 +321,7 @@ const char *tasklist_write(TaskList list) {
     }
 
     // Write all tasks to file
-    int i;
-    for (i = 0; i < list->length; ++i) {
+    for (int i = 0; i < list->length; ++i) {
         // Attempt write
         if (fputs(list->tasks[i], fp) == EOF) {
             fclose(fp);
