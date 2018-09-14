@@ -1,3 +1,6 @@
+/* Using getopt, need POSIX 1992 */
+#define _POSIX_C_SOURCE 2
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
