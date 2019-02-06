@@ -12,6 +12,16 @@
 const char *tasklib_add(const char *file, char **tasks, int verbose);
 
 /**
+ * Prepends tasks to a file.
+ *
+ * @param file Full path to the file
+ * @param tasks Array of tasks, terminated by a NULL element
+ * @param verbose Show list after modification (0 = false, 1 = true)
+ * @return Error message or NULL on success
+ */
+const char *tasklib_prepend(const char *file, char **tasks, int verbose);
+
+/**
  * Inserts a task into a list at a specific position.
  *
  * Any existing items at that position and after are pushed down.

@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
     /*
      * Some flags & option argument variables for user input
      */
-    int aflg = 0, iflg = 0, dflg = 0, mflg = 0, rflg = 0;
+    int aflg = 0, pflg = 0, iflg = 0, dflg = 0, mflg = 0, rflg = 0;
     int lflg = 0, vflg = 0, nflg = 0;
     // Set to 1 if there is a problem parsing options
     int errflg = 0;
@@ -47,10 +47,13 @@ int main(int argc, char **argv) {
      * Would be simpler with argp, but we need to use getopt for portability.
      */
     int c;
-    while ((c = getopt(argc, argv, "aidmrlhvn:s:")) != -1) {
+    while ((c = getopt(argc, argv, "apidmrlhvn:s:")) != -1) {
         switch (c) {
             case 'a':
                 aflg = 1;
+                break;
+            case 'p':
+                pflg = 1;
                 break;
             case 'i':
                 iflg = 1;
@@ -98,13 +101,13 @@ int main(int argc, char **argv) {
         // Problem noticed by getopt
         errflg ||
         // Mutually exclusive flags
-        aflg + iflg + dflg + mflg + rflg + lflg > 1 ||
+        aflg + pflg + iflg + dflg + mflg + rflg + lflg > 1 ||
         // -r doesn't have -n option
         nflg + rflg > 1 ||
         // -l doesn't have -n option
         lflg + rflg > 1 ||
         // -n can't occur on its own
-        nflg > aflg + iflg + dflg + mflg
+        nflg > aflg + pflg + iflg + dflg + mflg
     ) {
         fprintf(stderr, usage, argv[0]);
         exit(EXIT_FAILURE);
@@ -114,7 +117,7 @@ int main(int argc, char **argv) {
      * Get the filename(s) the commands will need
      */
     char *file = NULL, **files = NULL;
-    if (aflg + iflg + dflg + mflg) {
+    if (aflg + pflg + iflg + dflg + mflg) {
         // These commands use only a single task list
         if ((file = get_file(svalue, nvalue)) == NULL) {
             fprintf(stderr, "Unable to access directory\n");
@@ -140,6 +143,8 @@ int main(int argc, char **argv) {
     const char *error = NULL;
     if (aflg) {
         error = tasklib_add(file, &argv[optind], vflg);
+    } else if (pflg) {
+        error = tasklib_prepend(file, &argv[optind], vflg);
     } else if (iflg) {
         error = tasklib_insert(file, &argv[optind], vflg);
     } else if (dflg) {

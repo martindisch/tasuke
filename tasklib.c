@@ -245,6 +245,38 @@ const char *tasklib_add(const char *file, char **tasks, int verbose) {
     return NULL;
 }
 
+const char *tasklib_prepend(const char *file, char **tasks, int verbose) {
+    // Build TaskList ADT
+    TaskList list = tasklist_init(file);
+    // Try reading the list
+    const char *error = tasklist_read(list);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Try inserting all tasks
+    for (int ipos = 1; *tasks; ++tasks) {
+        error = tasklist_insert(list, ipos++, *tasks);
+        if (error) {
+            tasklist_destroy(list);
+            return error;
+        }
+    }
+    // Try writing the updated list to file
+    error = tasklist_write(list);
+    if (error) {
+        tasklist_destroy(list);
+        return error;
+    }
+    // Show the modified list
+    if (verbose) {
+        tasklist_print(list);
+    }
+    tasklist_destroy(list);
+
+    return NULL;
+}
+
 const char *tasklib_insert(
     const char *file, char **position_task, int verbose) {
     /*
