@@ -9,6 +9,7 @@
 static const char *usage =
     "Usage: %1$s [-s directory] [LIST]...\n"
     "  or   %1$s -a [-n list] [-s directory] [-v] TASK...\n"
+    "  or   %1$s -p [-n list] [-s directory] [-v] TASK...\n"
     "  or   %1$s -i [-n list] [-s directory] [-v] POSITION TASK\n"
     "  or   %1$s -d [-n list] [-s directory] [-v] POSITION...\n"
     "  or   %1$s -m [-n list] [-s directory] [-v] PREV_POS NEW_POS\n"
@@ -24,6 +25,7 @@ static const char *usage =
     "  -l            Show all list names\n"
     "  -m            Move a task inside a list from one position to another\n"
     "  -n list       Select a specific list for your current operation\n"
+    "  -p            Add tasks by prepending them to a list\n"
     "  -r            Remove task lists\n"
     "  -s directory  Select a specific directory to store task lists\n"
     "  -v            Show the list after modification\n"
