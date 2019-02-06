@@ -47,10 +47,12 @@ t                                           # List default list
 t mylist school                             # List specific lists
 ```
 
-**Add task(s)** by appending to list
+**Add task(s)** by appending/prepending to list
 ```
 t -a "My first task" "Second task"          # Add to default list
 t -a -n mylist "First task" "Second task"   # Add to specific list
+t -p "My first task" "Second task"          # Prepend to default list
+t -p -n mylist "First task" "Second task"   # Prepend to specific list
 ```
 
 **Insert task** by inserting at given position, shifting other items downwards
